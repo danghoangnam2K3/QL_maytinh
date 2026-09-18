@@ -723,7 +723,7 @@ export default function Home() {
             <div className="space-y-4">
               
               {/* Header Title Section */}
-              <div>
+              <div className="px-1 pt-0.5">
                 <h1 className="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight">
                   Dashboard
                 </h1>
@@ -732,69 +732,69 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* 4 TOP KPI CARDS (Matching Screenshot: 2-column flex inside card, icon vertically centered, text contained) */}
+              {/* 4 TOP KPI CARDS (Generous inner padding: text deeply indented, never touches border) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 
                 {/* 1. Người dùng */}
-                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
-                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                <div className="obsidian-card-hover p-6 rounded-2xl flex items-center justify-between min-h-[135px] overflow-hidden shadow-lg">
+                  <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Người dùng</span>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
                       42
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng số tài khoản đăng ký">
                       Tổng số tài khoản đăng ký
                     </p>
                   </div>
-                  <div className="w-11 h-11 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shrink-0 shadow-inner">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shrink-0 shadow-inner">
                     <Users className="w-5 h-5" />
                   </div>
                 </div>
 
                 {/* 2. Máy tính */}
-                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
-                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                <div className="obsidian-card-hover p-6 rounded-2xl flex items-center justify-between min-h-[135px] overflow-hidden shadow-lg">
+                  <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Máy tính</span>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
                       {computers.length}
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng số máy hiện có">
                       Tổng số máy hiện có
                     </p>
                   </div>
-                  <div className="w-11 h-11 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-inner">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-inner">
                     <Monitor className="w-5 h-5" />
                   </div>
                 </div>
 
                 {/* 3. Máy đang dùng */}
-                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
-                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                <div className="obsidian-card-hover p-6 rounded-2xl flex items-center justify-between min-h-[135px] overflow-hidden shadow-lg">
+                  <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Máy đang dùng</span>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
                       {inUseCount}
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Máy đang được sử dụng">
                       Máy đang được sử dụng
                     </p>
                   </div>
-                  <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-inner">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-inner">
                     <Laptop className="w-5 h-5" />
                   </div>
                 </div>
 
                 {/* 4. Tổng thời gian */}
-                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
-                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                <div className="obsidian-card-hover p-6 rounded-2xl flex items-center justify-between min-h-[135px] overflow-hidden shadow-lg">
+                  <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Tổng thời gian</span>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
                       128.5h
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng thời gian đã sử dụng">
                       Tổng thời gian đã sử dụng
                     </p>
                   </div>
-                  <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-inner">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-inner">
                     <Clock className="w-5 h-5" />
                   </div>
                 </div>
@@ -805,9 +805,9 @@ export default function Home() {
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
                 
                 {/* Left Panel: Máy theo trạng thái (5 cols) */}
-                <div className="xl:col-span-5 obsidian-card p-5 flex flex-col justify-between min-h-[350px]">
+                <div className="xl:col-span-5 obsidian-card p-6 sm:p-7 flex flex-col justify-between min-h-[360px]">
                   <div>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-4 px-0.5">
                       <div>
                         <h2 className="text-base font-extrabold text-white tracking-tight">
                           Máy theo trạng thái
@@ -821,46 +821,46 @@ export default function Home() {
 
                     <div className="space-y-3">
                       {/* Có sẵn */}
-                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                      <div className="relative p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
                         <div
                           className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 pointer-events-none transition-all duration-500"
                           style={{ width: `${computers.length ? (availableCount / computers.length) * 100 : 0}%` }}
                         />
-                        <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="relative z-10 flex items-center gap-3 pl-1">
                           <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-400" />
                           <span className="text-xs font-bold text-white">Có sẵn</span>
                         </div>
-                        <div className="relative z-10 font-mono text-xs font-extrabold text-emerald-400">
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-emerald-400 pr-1">
                           {availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)
                         </div>
                       </div>
 
                       {/* Đang sử dụng */}
-                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                      <div className="relative p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
                         <div
                           className="absolute left-0 top-0 bottom-0 bg-amber-500/10 pointer-events-none transition-all duration-500"
                           style={{ width: `${computers.length ? (inUseCount / computers.length) * 100 : 0}%` }}
                         />
-                        <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="relative z-10 flex items-center gap-3 pl-1">
                           <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-xs shadow-amber-400" />
                           <span className="text-xs font-bold text-white">Đang sử dụng</span>
                         </div>
-                        <div className="relative z-10 font-mono text-xs font-extrabold text-amber-400">
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-amber-400 pr-1">
                           {inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)
                         </div>
                       </div>
 
                       {/* Bảo trì */}
-                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                      <div className="relative p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
                         <div
                           className="absolute left-0 top-0 bottom-0 bg-rose-500/10 pointer-events-none transition-all duration-500"
                           style={{ width: `${computers.length ? (maintenanceCount / computers.length) * 100 : 0}%` }}
                         />
-                        <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="relative z-10 flex items-center gap-3 pl-1">
                           <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-xs shadow-rose-400" />
                           <span className="text-xs font-bold text-white">Bảo trì</span>
                         </div>
-                        <div className="relative z-10 font-mono text-xs font-extrabold text-rose-400">
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-rose-400 pr-1">
                           {maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)
                         </div>
                       </div>
@@ -868,12 +868,12 @@ export default function Home() {
                   </div>
 
                   {/* Room Breakdown Footer */}
-                  <div className="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-2.5">
-                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
+                  <div className="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-2.5 px-0.5">
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
                       <div className="text-[10px] text-slate-400">Phòng C201</div>
                       <div className="text-xs font-bold text-white mt-0.5 truncate">4 máy (100% OK)</div>
                     </div>
-                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
                       <div className="text-[10px] text-slate-400">Phòng C202</div>
                       <div className="text-xs font-bold text-white mt-0.5 truncate">2 máy (1 Đang dùng)</div>
                     </div>
@@ -881,9 +881,9 @@ export default function Home() {
                 </div>
 
                 {/* Right Panel: Thời gian sử dụng theo máy (7 cols) */}
-                <div className="xl:col-span-7 obsidian-card p-5 flex flex-col justify-between min-h-[350px]">
+                <div className="xl:col-span-7 obsidian-card p-6 sm:p-7 flex flex-col justify-between min-h-[360px]">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-3 px-0.5">
                       <div>
                         <h2 className="text-base font-extrabold text-white tracking-tight">
                           Thời gian sử dụng theo máy
@@ -902,7 +902,7 @@ export default function Home() {
                     </div>
 
                     {/* Bar Chart Container */}
-                    <div className="relative h-[210px] w-full flex items-end justify-between gap-2 pt-8 pb-3 px-3 bg-[#080d1a] rounded-xl border border-white/10 mt-3 shadow-inner">
+                    <div className="relative h-[210px] w-full flex items-end justify-between gap-2 pt-8 pb-3 px-4 bg-[#080d1a] rounded-xl border border-white/10 mt-3 shadow-inner">
                       <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
                         <div className="border-b border-dashed border-slate-500 w-full" />
                         <div className="border-b border-dashed border-slate-500 w-full" />
@@ -937,7 +937,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-2.5 border-t border-white/10">
+                  <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-3 border-t border-white/10 px-0.5">
                     <span className="flex items-center gap-1.5 font-medium">
                       <Activity className="w-3.5 h-3.5 text-indigo-400" />
                       Cập nhật tự động mỗi 5 giây
@@ -954,11 +954,11 @@ export default function Home() {
               </div>
 
               {/* 3. RECENT ACTIVITY ON DASHBOARD */}
-              <div className="obsidian-card p-5 space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+              <div className="obsidian-card p-6 sm:p-7 space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10 px-0.5">
                   <div>
                     <h2 className="text-base font-bold text-white">Yêu cầu mượn máy gần đây</h2>
-                    <p className="text-[11px] text-slate-400">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
                   </div>
                   <button
                     onClick={() => setCurrentView("computers")}
@@ -972,33 +972,33 @@ export default function Home() {
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-white/10 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
-                        <th className="py-2.5 px-3">Mã máy</th>
-                        <th className="py-2.5 px-3">Người yêu cầu</th>
-                        <th className="py-2.5 px-3">Lý do mượn</th>
-                        <th className="py-2.5 px-3">Thời lượng</th>
-                        <th className="py-2.5 px-3">Trạng thái</th>
-                        <th className="py-2.5 px-3 text-right">Hành động</th>
+                        <th className="py-3 px-4">Mã máy</th>
+                        <th className="py-3 px-4">Người yêu cầu</th>
+                        <th className="py-3 px-4">Lý do mượn</th>
+                        <th className="py-3 px-4">Thời lượng</th>
+                        <th className="py-3 px-4">Trạng thái</th>
+                        <th className="py-3 px-4 text-right">Hành động</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/[0.06]">
                       {requests.slice(0, 3).map((req) => (
                         <tr key={req.id} className="hover:bg-white/[0.03] transition">
-                          <td className="py-3 px-3 font-bold text-white font-mono text-xs whitespace-nowrap">
+                          <td className="py-3.5 px-4 font-bold text-white font-mono text-xs whitespace-nowrap">
                             {req.computerName}
                           </td>
-                          <td className="py-3 px-3 text-slate-200 whitespace-nowrap">
+                          <td className="py-3.5 px-4 text-slate-200 whitespace-nowrap">
                             <span className="font-semibold text-white">{req.requester}</span>
                             {req.requesterId && (
                               <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
                             )}
                           </td>
-                          <td className="py-3 px-3 text-slate-300 max-w-xs truncate font-medium">
+                          <td className="py-3.5 px-4 text-slate-300 max-w-xs truncate font-medium">
                             {req.reason || "Không có lý do"}
                           </td>
-                          <td className="py-3 px-3 text-slate-400 font-semibold whitespace-nowrap">
+                          <td className="py-3.5 px-4 text-slate-400 font-semibold whitespace-nowrap">
                             {req.duration}
                           </td>
-                          <td className="py-3 px-3 whitespace-nowrap">
+                          <td className="py-3.5 px-4 whitespace-nowrap">
                             {req.status === "approved" && (
                               <span className="badge-available">Đã duyệt</span>
                             )}
@@ -1009,7 +1009,7 @@ export default function Home() {
                               <span className="badge-maintenance">Từ chối</span>
                             )}
                           </td>
-                          <td className="py-3 px-3 text-right whitespace-nowrap">
+                          <td className="py-3.5 px-4 text-right whitespace-nowrap">
                             {req.status === "pending" ? (
                               <div className="flex items-center justify-end gap-1.5">
                                 <button
