@@ -33,123 +33,18 @@ import {
   HardDrive
 } from "lucide-react";
 
-// Default Mock Data
-const INITIAL_USER = {
-  fullName: "Hồ Ngọc Hoàng Long",
-  studentId: "NV0001171",
-  classRoom: "KCT",
+// Empty State Template (Populated directly from Supabase database)
+const EMPTY_USER = {
+  fullName: "Đang tải hồ sơ...",
+  studentId: "",
+  classRoom: "",
   gender: "Nam",
-  phone: "0987654321",
-  email: "longho.swe@gmail.com",
+  phone: "",
+  email: "",
   role: "Quản trị viên",
   status: "ACTIVE",
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
 };
-
-const INITIAL_COMPUTERS = [
-  {
-    id: "M04",
-    name: "M04",
-    room: "C201",
-    cpu: "Intel Core i7-13700",
-    ram: "16GB DDR5",
-    gpu: "RTX 3060 12GB",
-    status: "available",
-    currentUser: null,
-    notes: "Máy hoạt động mượt mà, đầy đủ phần mềm thực hành"
-  },
-  {
-    id: "M03",
-    name: "M03",
-    room: "C201",
-    cpu: "Intel Core i5-13400",
-    ram: "16GB DDR4",
-    gpu: "GTX 1660 Super",
-    status: "available",
-    currentUser: null,
-    notes: "Đã cập nhật Visual Studio 2022 và Docker"
-  },
-  {
-    id: "M02",
-    name: "M02",
-    room: "C201",
-    cpu: "Intel Core i7-12700",
-    ram: "32GB DDR4",
-    gpu: "RTX 3070 8GB",
-    status: "available",
-    currentUser: null,
-    notes: "Cấu hình đồ hoạ & AI/ML"
-  },
-  {
-    id: "M01",
-    name: "M01",
-    room: "C201",
-    cpu: "Intel Core i5-12400",
-    ram: "16GB DDR4",
-    gpu: "GTX 1650 4GB",
-    status: "available",
-    currentUser: null,
-    notes: "Máy chuẩn phòng thực hành chung"
-  },
-  {
-    id: "M05",
-    name: "M05",
-    room: "C202",
-    cpu: "AMD Ryzen 7 5700X",
-    ram: "32GB DDR4",
-    gpu: "RTX 3060 Ti",
-    status: "in_use",
-    currentUser: "Trần Văn Bảo",
-    notes: "Đang làm bài tập môn Trí tuệ nhân tạo"
-  },
-  {
-    id: "M06",
-    name: "M06",
-    room: "C202",
-    cpu: "Intel Core i5-11400",
-    ram: "8GB DDR4",
-    gpu: "Intel UHD 730",
-    status: "maintenance",
-    currentUser: null,
-    notes: "Đang bảo trì thay nguồn điện & vệ sinh tản nhiệt"
-  }
-];
-
-const INITIAL_REQUESTS = [
-  {
-    id: "REQ-101",
-    computerId: "M01",
-    computerName: "M01",
-    requester: "Nguyễn Thanh Tùng",
-    requesterId: "SV2021001",
-    reason: "Làm bài tập lớn Kiến trúc máy tính",
-    duration: "2 giờ",
-    createdAt: "2026-09-18 19:15",
-    status: "approved"
-  },
-  {
-    id: "REQ-102",
-    computerId: "M04",
-    computerName: "M04",
-    requester: "Đặng Mai Phương",
-    requesterId: "SV2021045",
-    reason: "Demo đồ án Tốt nghiệp chuyên ngành",
-    duration: "4 giờ",
-    createdAt: "2026-09-18 20:30",
-    status: "pending"
-  },
-  {
-    id: "REQ-103",
-    computerId: "M02",
-    computerName: "M02",
-    requester: "Lê Quốc Hưng",
-    requesterId: "SV2021088",
-    reason: "Không có lý do rõ ràng",
-    duration: "1 giờ",
-    createdAt: "2026-09-18 18:00",
-    status: "rejected"
-  }
-];
 
 export default function Home() {
   // Navigation & View State
@@ -157,10 +52,20 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  // App Data State
-  const [user, setUser] = useState(INITIAL_USER);
-  const [computers, setComputers] = useState(INITIAL_COMPUTERS);
-  const [requests, setRequests] = useState(INITIAL_REQUESTS);
+  // App Live Data State (Synced with Supabase)
+  const [user, setUser] = useState(EMPTY_USER);
+  const [computers, setComputers] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [usageLogs, setUsageLogs] = useState([]);
+  const [stats, setStats] = useState({
+    userCount: 0,
+    totalComputers: 0,
+    inUseComputers: 0,
+    availableComputers: 0,
+    maintenanceComputers: 0,
+    totalUsageHours: "0.0h"
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   // Filter & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -206,34 +111,51 @@ export default function Home() {
     }, 3500);
   };
 
-  // Sync with API
+  // Sync with Supabase via API Routes
   const fetchBackendData = async () => {
     try {
-      const resComps = await fetch("/api/computers");
+      const [resComps, resReqs, resProfile, resStats, resUsage] = await Promise.all([
+        fetch("/api/computers"),
+        fetch("/api/requests"),
+        fetch("/api/profile"),
+        fetch("/api/stats"),
+        fetch("/api/usage-logs")
+      ]);
+
       if (resComps.ok) {
         const dataComps = await resComps.json();
         if (dataComps.data) setComputers(dataComps.data);
       }
-      const resReqs = await fetch("/api/requests");
       if (resReqs.ok) {
         const dataReqs = await resReqs.json();
         if (dataReqs.data) setRequests(dataReqs.data);
       }
-      const resProfile = await fetch("/api/profile");
       if (resProfile.ok) {
         const dataProfile = await resProfile.json();
         if (dataProfile.data) setUser(dataProfile.data);
       }
-    } catch (e) { }
+      if (resStats.ok) {
+        const dataStats = await resStats.json();
+        if (dataStats.data) setStats(dataStats.data);
+      }
+      if (resUsage.ok) {
+        const dataUsage = await resUsage.json();
+        if (dataUsage.data) setUsageLogs(dataUsage.data);
+      }
+    } catch (e) {
+      console.warn("Lỗi tải dữ liệu Supabase:", e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchBackendData();
-    const interval = setInterval(fetchBackendData, 8000);
+    const interval = setInterval(fetchBackendData, 6000);
     return () => clearInterval(interval);
   }, []);
 
-  // Computed metrics
+  // Computed metrics from real data
   const availableCount = computers.filter(c => c.status === "available").length;
   const inUseCount = computers.filter(c => c.status === "in_use").length;
   const maintenanceCount = computers.filter(c => c.status === "maintenance").length;
@@ -241,10 +163,10 @@ export default function Home() {
 
   // Filtered computers list
   const filteredComputers = computers.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.room.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = (c.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.room || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (c.cpu && c.cpu.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesRoom = selectedRoomFilter === "all" || c.room.toLowerCase() === selectedRoomFilter.toLowerCase();
+    const matchesRoom = selectedRoomFilter === "all" || (c.room || "").toLowerCase() === selectedRoomFilter.toLowerCase();
     return matchesSearch && matchesRoom;
   });
 
@@ -278,41 +200,28 @@ export default function Home() {
     const comp = computers.find(c => c.id === borrowForm.computerId);
     if (!comp) return;
 
-    const newReq = {
-      id: "REQ-" + Math.floor(100 + Math.random() * 900),
-      computerId: comp.id,
-      computerName: comp.name,
-      requester: user.fullName,
-      requesterId: user.studentId,
-      reason: borrowForm.reason || "Làm bài thực hành",
-      duration: borrowForm.duration,
-      createdAt: new Date().toISOString().replace("T", " ").substring(0, 16),
-      status: "pending"
-    };
-
     try {
       const res = await fetch("/api/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           computerId: comp.id,
-          reason: newReq.reason,
-          duration: newReq.duration,
-          requesterName: user.fullName
+          reason: borrowForm.reason || "Làm bài thực hành",
+          duration: borrowForm.duration,
+          requesterName: user.fullName || "Sinh viên"
         })
       });
       if (res.ok) {
-        const data = await res.json();
-        setRequests(prev => [data.data, ...prev]);
         showToast("Gửi yêu cầu mượn máy thành công! Đang chờ duyệt.");
         setBorrowForm({ computerId: "", reason: "", duration: "2 giờ" });
+        await fetchBackendData();
         return;
       }
     } catch (e) { }
 
-    setRequests(prev => [newReq, ...prev]);
-    setBorrowForm({ computerId: "", reason: "", duration: "2 giờ" });
     showToast("Gửi yêu cầu mượn máy thành công! Đang chờ duyệt.");
+    setBorrowForm({ computerId: "", reason: "", duration: "2 giờ" });
+    fetchBackendData();
   };
 
   // Handle Request Approval / Rejection
@@ -323,19 +232,11 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
       });
-    } catch (e) { }
-
-    setRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: newStatus } : r));
-
-    const req = requests.find(r => r.id === reqId);
-    if (req) {
-      if (newStatus === "approved") {
-        setComputers(prev => prev.map(c => c.id === req.computerId ? { ...c, status: "in_use", currentUser: req.requester } : c));
-        showToast(`Đã duyệt yêu cầu mượn máy ${req.computerName} cho ${req.requester}`);
-      } else if (newStatus === "rejected") {
-        setComputers(prev => prev.map(c => c.id === req.computerId && c.currentUser === req.requester ? { ...c, status: "available", currentUser: null } : c));
-        showToast(`Đã từ chối yêu cầu của ${req.requester}`, "info");
-      }
+      showToast(`Đã cập nhật trạng thái yêu cầu sang "${newStatus}"`);
+    } catch (e) {
+      showToast("Lỗi khi cập nhật trạng thái", "error");
+    } finally {
+      await fetchBackendData();
     }
   };
 
@@ -366,17 +267,16 @@ export default function Home() {
         body: JSON.stringify(newComp)
       });
       if (res.ok) {
-        const data = await res.json();
-        setComputers(prev => [data.data, ...prev]);
         setIsAddModalOpen(false);
         showToast(`Đã thêm máy ${newComp.name} vào hệ thống!`);
+        await fetchBackendData();
         return;
       }
     } catch (e) { }
 
-    setComputers(prev => [newComp, ...prev]);
     setIsAddModalOpen(false);
     showToast(`Đã thêm máy ${newComp.name} vào hệ thống!`);
+    await fetchBackendData();
   };
 
   // Handle Delete Computer
@@ -385,10 +285,9 @@ export default function Home() {
 
     try {
       await fetch(`/api/computers/${compId}`, { method: "DELETE" });
+      showToast(`Đã xoá máy ${compId} thành công!`, "info");
     } catch (e) { }
-
-    setComputers(prev => prev.filter(c => c.id !== compId));
-    showToast(`Đã xoá máy ${compId} thành công!`, "info");
+    await fetchBackendData();
   };
 
   // Handle Profile Update
@@ -400,8 +299,12 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user)
       });
-    } catch (e) { }
-    showToast("Đã lưu thay đổi hồ sơ cá nhân thành công!");
+      showToast("Đã lưu thay đổi hồ sơ cá nhân vào Supabase thành công!");
+    } catch (e) {
+      showToast("Lỗi khi cập nhật hồ sơ", "error");
+    } finally {
+      await fetchBackendData();
+    }
   };
 
   // -------------------------------------------------------------
@@ -740,7 +643,7 @@ export default function Home() {
                   <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Người dùng</span>
                     <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
-                      42
+                      {stats.userCount || (user && user.fullName && user.fullName !== "Đang tải hồ sơ..." ? 1 : 0)}
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng số tài khoản đăng ký">
                       Tổng số tài khoản đăng ký
@@ -788,7 +691,7 @@ export default function Home() {
                   <div className="flex-1 min-w-0 pr-4 flex flex-col justify-between">
                     <span className="text-xs font-medium text-slate-400">Tổng thời gian</span>
                     <div className="text-3xl sm:text-4xl font-extrabold text-white my-1.5 leading-none tracking-tight">
-                      128.5h
+                      {stats.totalUsageHours || "0.0h"}
                     </div>
                     <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng thời gian đã sử dụng">
                       Tổng thời gian đã sử dụng
@@ -867,15 +770,19 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Room Breakdown Footer */}
+                  {/* Room Breakdown Footer (Calculated dynamically) */}
                   <div className="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-2.5 px-0.5">
                     <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
                       <div className="text-[10px] text-slate-400">Phòng C201</div>
-                      <div className="text-xs font-bold text-white mt-0.5 truncate">4 máy (100% OK)</div>
+                      <div className="text-xs font-bold text-white mt-0.5 truncate">
+                        {computers.filter(c => c.room === 'C201').length} máy ({computers.filter(c => c.room === 'C201' && c.status === 'available').length} Có sẵn)
+                      </div>
                     </div>
                     <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
                       <div className="text-[10px] text-slate-400">Phòng C202</div>
-                      <div className="text-xs font-bold text-white mt-0.5 truncate">2 máy (1 Đang dùng)</div>
+                      <div className="text-xs font-bold text-white mt-0.5 truncate">
+                        {computers.filter(c => c.room === 'C202').length} máy ({computers.filter(c => c.room === 'C202' && c.status === 'in_use').length} Đang dùng)
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -888,11 +795,11 @@ export default function Home() {
                         <h2 className="text-base font-extrabold text-white tracking-tight">
                           Thời gian sử dụng theo máy
                         </h2>
-                        <p className="text-[11px] text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực từ Supabase</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="hidden sm:inline text-xs text-slate-400">
-                          Cao điểm: <strong className="text-indigo-400 font-bold">11:00 (95%)</strong>
+                          Máy theo dõi: <strong className="text-indigo-400 font-bold">{usageLogs.length} phiên</strong>
                         </span>
                         <span className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
@@ -901,49 +808,51 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* Bar Chart Container */}
-                    <div className="relative h-[210px] w-full flex items-end justify-between gap-2 pt-8 pb-3 px-4 bg-[#080d1a] rounded-xl border border-white/10 mt-3 shadow-inner">
-                      <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
-                        <div className="border-b border-dashed border-slate-500 w-full" />
-                        <div className="border-b border-dashed border-slate-500 w-full" />
-                        <div className="border-b border-dashed border-slate-500 w-full" />
+                    {/* Bar Chart Container (Dynamic from Supabase usage_logs) */}
+                    {(!usageLogs || usageLogs.length === 0) ? (
+                      <div className="relative h-[210px] w-full flex flex-col items-center justify-center text-center p-4 bg-[#080d1a] rounded-xl border border-white/10 mt-3">
+                        <Clock className="w-7 h-7 text-indigo-400/60 mb-2 animate-pulse" />
+                        <span className="text-xs text-slate-300 font-semibold">Đang nạp dữ liệu từ bảng usage_logs trong Supabase...</span>
+                        <span className="text-[11px] text-slate-500 mt-1">Dữ liệu tải thời gian thực sẽ tự động hiển thị tại đây</span>
                       </div>
-
-                      {[
-                        { time: "07:00", val: 30, label: "M01" },
-                        { time: "09:00", val: 85, label: "M02" },
-                        { time: "11:00", val: 95, label: "M03" },
-                        { time: "13:00", val: 50, label: "M04" },
-                        { time: "15:00", val: 90, label: "M05" },
-                        { time: "17:00", val: 75, label: "M06" },
-                        { time: "19:00", val: 40, label: "M01" },
-                        { time: "21:00", val: 20, label: "M04" }
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
-                          <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/60 text-white text-[10px] px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none z-20">
-                            {item.label}: {item.val}%
-                          </div>
-                          <div className="w-full max-w-[34px] h-[130px] bg-slate-800/80 rounded-lg flex items-end overflow-hidden">
-                            <div
-                              className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-md shadow-indigo-500/30"
-                              style={{ height: `${item.val}%` }}
-                            />
-                          </div>
-                          <span className="text-[11px] text-slate-400 group-hover:text-indigo-300 font-mono font-bold">
-                            {item.time}
-                          </span>
+                    ) : (
+                      <div className="relative h-[210px] w-full flex items-end justify-between gap-2 pt-8 pb-3 px-4 bg-[#080d1a] rounded-xl border border-white/10 mt-3 shadow-inner">
+                        <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
+                          <div className="border-b border-dashed border-slate-500 w-full" />
+                          <div className="border-b border-dashed border-slate-500 w-full" />
+                          <div className="border-b border-dashed border-slate-500 w-full" />
                         </div>
-                      ))}
-                    </div>
+
+                        {usageLogs.map((item, idx) => (
+                          <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
+                            <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/60 text-white text-[10px] px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none z-20">
+                              {item.label || item.computerId}: {item.val}%
+                            </div>
+                            <div className="w-full max-w-[34px] h-[130px] bg-slate-800/80 rounded-lg flex items-end overflow-hidden">
+                              <div
+                                className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-md shadow-indigo-500/30"
+                                style={{ height: `${Math.min(100, Math.max(8, item.val))}%` }}
+                              />
+                            </div>
+                            <span className="text-[11px] text-slate-400 group-hover:text-indigo-300 font-mono font-bold">
+                              {item.time}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-3 border-t border-white/10 px-0.5">
                     <span className="flex items-center gap-1.5 font-medium">
                       <Activity className="w-3.5 h-3.5 text-indigo-400" />
-                      Cập nhật tự động mỗi 5 giây
+                      Cập nhật tự động mỗi 6 giây từ CSDL
                     </span>
                     <button
-                      onClick={() => showToast("Đã làm mới dữ liệu biểu đồ!")}
+                      onClick={() => {
+                        fetchBackendData();
+                        showToast("Đã đồng bộ lại dữ liệu từ Supabase!");
+                      }}
                       className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-bold transition"
                     >
                       <RotateCcw className="w-3 h-3" /> Làm mới
@@ -958,7 +867,7 @@ export default function Home() {
                 <div className="flex items-center justify-between pb-3 border-b border-white/10 px-0.5">
                   <div>
                     <h2 className="text-base font-bold text-white">Yêu cầu mượn máy gần đây</h2>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Dữ liệu thời gian thực từ bảng borrow_requests</p>
                   </div>
                   <button
                     onClick={() => setCurrentView("computers")}
@@ -981,56 +890,64 @@ export default function Home() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/[0.06]">
-                      {requests.slice(0, 3).map((req) => (
-                        <tr key={req.id} className="hover:bg-white/[0.03] transition">
-                          <td className="py-3.5 px-4 font-bold text-white font-mono text-xs whitespace-nowrap">
-                            {req.computerName}
-                          </td>
-                          <td className="py-3.5 px-4 text-slate-200 whitespace-nowrap">
-                            <span className="font-semibold text-white">{req.requester}</span>
-                            {req.requesterId && (
-                              <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
-                            )}
-                          </td>
-                          <td className="py-3.5 px-4 text-slate-300 max-w-xs truncate font-medium">
-                            {req.reason || "Không có lý do"}
-                          </td>
-                          <td className="py-3.5 px-4 text-slate-400 font-semibold whitespace-nowrap">
-                            {req.duration}
-                          </td>
-                          <td className="py-3.5 px-4 whitespace-nowrap">
-                            {req.status === "approved" && (
-                              <span className="badge-available">Đã duyệt</span>
-                            )}
-                            {req.status === "pending" && (
-                              <span className="badge-pending">Chờ duyệt</span>
-                            )}
-                            {req.status === "rejected" && (
-                              <span className="badge-maintenance">Từ chối</span>
-                            )}
-                          </td>
-                          <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                            {req.status === "pending" ? (
-                              <div className="flex items-center justify-end gap-1.5">
-                                <button
-                                  onClick={() => handleUpdateRequestStatus(req.id, "approved")}
-                                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold transition shadow-xs"
-                                >
-                                  Duyệt
-                                </button>
-                                <button
-                                  onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
-                                  className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold transition shadow-xs"
-                                >
-                                  Từ chối
-                                </button>
-                              </div>
-                            ) : (
-                              <span className="text-xs text-slate-500 font-medium">Hoàn tất</span>
-                            )}
+                      {requests.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="py-8 text-center text-slate-400 text-xs">
+                            Chưa có yêu cầu mượn máy nào trong CSDL Supabase
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        requests.slice(0, 5).map((req) => (
+                          <tr key={req.id} className="hover:bg-white/[0.03] transition">
+                            <td className="py-3.5 px-4 font-bold text-white font-mono text-xs whitespace-nowrap">
+                              {req.computerName}
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-200 whitespace-nowrap">
+                              <span className="font-semibold text-white">{req.requester}</span>
+                              {req.requesterId && (
+                                <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-300 max-w-xs truncate font-medium">
+                              {req.reason || "Không có lý do"}
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-400 font-semibold whitespace-nowrap">
+                              {req.duration}
+                            </td>
+                            <td className="py-3.5 px-4 whitespace-nowrap">
+                              {req.status === "approved" && (
+                                <span className="badge-available">Đã duyệt</span>
+                              )}
+                              {req.status === "pending" && (
+                                <span className="badge-pending">Chờ duyệt</span>
+                              )}
+                              {req.status === "rejected" && (
+                                <span className="badge-maintenance">Từ chối</span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                              {req.status === "pending" ? (
+                                <div className="flex items-center justify-end gap-1.5">
+                                  <button
+                                    onClick={() => handleUpdateRequestStatus(req.id, "approved")}
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold transition shadow-xs"
+                                  >
+                                    Duyệt
+                                  </button>
+                                  <button
+                                    onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
+                                    className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold transition shadow-xs"
+                                  >
+                                    Từ chối
+                                  </button>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-slate-500 font-medium">Hoàn tất</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1151,6 +1068,13 @@ export default function Home() {
 
                     {/* List of Machines */}
                     <div className="space-y-3.5">
+                      {filteredComputers.length === 0 && (
+                        <div className="text-center py-10 px-4 rounded-2xl bg-white/[0.02] border border-dashed border-white/10">
+                          <Monitor className="w-10 h-10 text-slate-500 mx-auto mb-3 opacity-60" />
+                          <p className="text-slate-300 font-semibold text-sm">Chưa có máy tính nào trong Supabase</p>
+                          <p className="text-slate-500 text-xs mt-1">Vui lòng thêm máy tính mới hoặc import dữ liệu mẫu vào Supabase</p>
+                        </div>
+                      )}
                       {filteredComputers.map((comp) => (
                         <div
                           key={comp.id}
@@ -1192,10 +1116,17 @@ export default function Home() {
                               Xem chi tiết
                             </button>
                             <button
-                              onClick={() => {
+                              onClick={async () => {
                                 const newNotes = prompt(`Sửa ghi chú cho máy ${comp.name}:`, comp.notes || "");
                                 if (newNotes !== null) {
-                                  setComputers(prev => prev.map(c => c.id === comp.id ? { ...c, notes: newNotes } : c));
+                                  try {
+                                    await fetch(`/api/computers/${comp.id}`, {
+                                      method: "PUT",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({ notes: newNotes })
+                                    });
+                                  } catch (err) {}
+                                  await fetchBackendData();
                                   showToast(`Đã cập nhật máy ${comp.name}`);
                                 }
                               }}

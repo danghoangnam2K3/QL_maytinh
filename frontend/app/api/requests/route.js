@@ -1,55 +1,52 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
 
-const FALLBACK_REQUESTS = [
-  {
-    id: 'REQ-101',
-    computer_id: 'M01',
-    computer_name: 'M01',
-    requester: 'Nguyễn Thanh Tùng',
-    requester_id: 'SV2021001',
-    reason: 'Làm bài tập lớn Kiến trúc máy tính',
-    duration: '2 giờ',
-    created_at: '2026-09-18 19:15',
-    status: 'approved'
-  },
-  {
-    id: 'REQ-102',
-    computer_id: 'M04',
-    computer_name: 'M04',
-    requester: 'Đặng Mai Phương',
-    requester_id: 'SV2021045',
-    reason: 'Demo đồ án Tốt nghiệp chuyên ngành',
-    duration: '4 giờ',
-    created_at: '2026-09-18 20:30',
-    status: 'pending'
-  },
-  {
-    id: 'REQ-103',
-    computer_id: 'M02',
-    computer_name: 'M02',
-    requester: 'Lê Quốc Hưng',
-    requester_id: 'SV2021088',
-    reason: 'Không có lý do rõ ràng',
-    duration: '1 giờ',
-    created_at: '2026-09-18 18:00',
-    status: 'rejected'
-  }
-];
-
 export async function GET() {
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.from('borrow_requests').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) {
-        return NextResponse.json({ success: true, count: data.length, data });
-      }
-    } catch (e) {}
+  if (!supabase) {
+    return NextResponse.json({
+      success: false,
+      message: 'Chưa cấu hình biến môi trường Supabase.',
+      count: 0,
+      data: []
+    });
   }
-  return NextResponse.json({ success: true, count: FALLBACK_REQUESTS.length, data: FALLBACK_REQUESTS });
+
+  try {
+    const { data, error } = await supabase
+      .from('borrow_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return NextResponse.json({ success: false, message: error.message, count: 0, data: [] }, { status: 400 });
+    }
+
+    const formattedData = (data || []).map(r => ({
+      id: r.id,
+      computerId: r.computer_id,
+      computerName: r.computer_name || r.computer_id,
+      requester: r.requester,
+      requesterId: r.requester_id,
+      reason: r.reason,
+      duration: r.duration,
+      status: r.status,
+      createdAt: r.created_at
+    }));
+
+    return NextResponse.json({ success: true, count: formattedData.length, data: formattedData });
+  } catch (err) {
+    return NextResponse.json({ success: false, message: err.message, count: 0, data: [] }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
+  if (!supabase) {
+    return NextResponse.json({
+      success: false,
+      message: 'Chưa cấu hình Supabase để gửi yêu cầu.'
+    }, { status: 503 });
+  }
+
   try {
     const body = await req.json();
     const newReq = {
@@ -58,20 +55,21 @@ export async function POST(req) {
       computer_name: body.computerName || body.computerId,
       requester: body.requesterName || 'Hồ Ngọc Hoàng Long',
       requester_id: body.requesterId || 'NV0001171',
-      reason: body.reason || 'Làm bài thực hành',
+      reason: body.reason || 'Thực hành máy tính',
       duration: body.duration || '2 giờ',
-      status: 'pending',
-      created_at: new Date().toISOString().replace('T', ' ').substring(0, 16)
+      status: 'pending'
     };
 
-    if (supabase) {
-      const { data, error } = await supabase.from('borrow_requests').insert([newReq]).select();
-      if (!error && data) {
-        return NextResponse.json({ success: true, message: 'Gửi yêu cầu mượn máy thành công!', data: data[0] }, { status: 201 });
-      }
+    const { data, error } = await supabase
+      .from('borrow_requests')
+      .insert([newReq])
+      .select();
+
+    if (error) {
+      return NextResponse.json({ success: false, message: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, message: 'Gửi yêu cầu mượn máy thành công!', data: newReq }, { status: 201 });
+    return NextResponse.json({ success: true, message: 'Gửi yêu cầu mượn máy lên Supabase thành công!', data: data ? data[0] : newReq }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ success: false, message: err.message }, { status: 500 });
   }
