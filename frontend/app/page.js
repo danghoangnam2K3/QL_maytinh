@@ -30,9 +30,7 @@ import {
   TrendingUp,
   Activity,
   Cpu,
-  HardDrive,
-  Sun,
-  Moon
+  HardDrive
 } from "lucide-react";
 
 // Default Mock Data
@@ -158,7 +156,6 @@ export default function Home() {
   const [currentView, setCurrentView] = useState("dashboard"); // login, dashboard, computers, swagger, profile
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [theme, setTheme] = useState("light"); // light (default matching reference), dark
 
   // App Data State
   const [user, setUser] = useState(INITIAL_USER);
@@ -172,7 +169,7 @@ export default function Home() {
   // Modals & Forms
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedComputerDetail, setSelectedComputerDetail] = useState(null);
-  
+
   // Borrow form state
   const [borrowForm, setBorrowForm] = useState({
     computerId: "",
@@ -227,7 +224,7 @@ export default function Home() {
         const dataProfile = await resProfile.json();
         if (dataProfile.data) setUser(dataProfile.data);
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   useEffect(() => {
@@ -264,7 +261,7 @@ export default function Home() {
         const data = await res.json();
         if (data.user) setUser(data.user);
       }
-    } catch (err) {}
+    } catch (err) { }
     setIsLoggedIn(true);
     setCurrentView("dashboard");
     showToast("Đăng nhập thành công! Chào mừng trở lại.");
@@ -311,7 +308,7 @@ export default function Home() {
         setBorrowForm({ computerId: "", reason: "", duration: "2 giờ" });
         return;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     setRequests(prev => [newReq, ...prev]);
     setBorrowForm({ computerId: "", reason: "", duration: "2 giờ" });
@@ -326,7 +323,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
       });
-    } catch (e) {}
+    } catch (e) { }
 
     setRequests(prev => prev.map(r => r.id === reqId ? { ...r, status: newStatus } : r));
 
@@ -375,7 +372,7 @@ export default function Home() {
         showToast(`Đã thêm máy ${newComp.name} vào hệ thống!`);
         return;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     setComputers(prev => [newComp, ...prev]);
     setIsAddModalOpen(false);
@@ -388,7 +385,7 @@ export default function Home() {
 
     try {
       await fetch(`/api/computers/${compId}`, { method: "DELETE" });
-    } catch (e) {}
+    } catch (e) { }
 
     setComputers(prev => prev.filter(c => c.id !== compId));
     showToast(`Đã xoá máy ${compId} thành công!`, "info");
@@ -403,7 +400,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user)
       });
-    } catch (e) {}
+    } catch (e) { }
     showToast("Đã lưu thay đổi hồ sơ cá nhân thành công!");
   };
 
@@ -419,7 +416,7 @@ export default function Home() {
 
         {/* Main Split Login Card */}
         <div className="w-full max-w-4xl rounded-3xl overflow-hidden obsidian-card grid grid-cols-1 md:grid-cols-12 min-h-[530px] shadow-2xl relative z-10 border border-white/15">
-          
+
           {/* Left Column: Dark Gradient Hero Banner */}
           <div className="md:col-span-5 relative p-8 md:p-10 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#141d38] to-[#0c1222] border-b md:border-b-0 md:border-r border-white/15">
             <div className="relative z-10">
@@ -547,529 +544,500 @@ export default function Home() {
   }
 
   // -------------------------------------------------------------
-  // MAIN APPLICATION LAYOUT (Screenshot 2, 3, 4 with Refined Proportions)
+  // MAIN APPLICATION LAYOUT (Obsidian Black Edition matching reference proportions)
   // -------------------------------------------------------------
   return (
-    <div className={`min-h-screen w-full transition-colors duration-200 ${theme === "dark" ? "dark bg-[#07090e] text-slate-100" : "bg-[#f1f4fb] text-slate-800"}`}>
+    <div className="min-h-screen w-full bg-[#07090e] text-slate-100 flex flex-col p-3 sm:p-4 lg:p-5 gap-4">
       
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-[#12192c]/95 dark:bg-[#12192c]/95 text-white shadow-xl animate-bounce-short">
+        <div className="fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-[#12192c]/95 text-white shadow-xl animate-bounce-short">
           <Sparkles className="w-4 h-4 text-indigo-400 shrink-0" />
           <span className="text-xs font-semibold">{toast.message}</span>
         </div>
       )}
 
-      {/* FULL-WIDTH FLUID CONTAINER MATCHING SCREENSHOT */}
-      <div className="w-full min-h-screen p-3 sm:p-4 lg:p-5 flex flex-col gap-4">
+      {/* 1. TOP NAVBAR (Matching Screenshot: Sleek compact floating card) */}
+      <header className="w-full obsidian-card px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-lg">
+        
+        {/* Left: Mobile Toggle & Brand Logo */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
 
-        {/* 1. TOP NAVBAR (Matching Screenshot: Sleek, compact white/dark floating card) */}
-        <header className="w-full app-card px-4 sm:px-5 py-3 flex items-center justify-between shadow-xs">
-          
-          {/* Left: Mobile Toggle & Brand Logo */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-indigo-600"
-            >
-              <Menu className="w-4 h-4" />
-            </button>
-
-            <div
-              className="flex items-center gap-2.5 cursor-pointer group"
-              onClick={() => setCurrentView("dashboard")}
-            >
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm group-hover:scale-105 transition">
+          <div
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => setCurrentView("dashboard")}
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-md shadow-indigo-500/25 group-hover:scale-105 transition">
+              <div className="w-full h-full bg-[#0d1324] rounded-[10px] flex items-center justify-center font-extrabold text-sm text-white">
                 Q
               </div>
-              <div>
-                <div className="text-[10px] tracking-wider uppercase text-indigo-600 dark:text-indigo-400 font-extrabold leading-none">
-                  WORKSPACE
-                </div>
-                <div className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
-                  QLPL Demo
-                </div>
+            </div>
+            <div>
+              <div className="text-[10px] tracking-widest uppercase text-slate-400 font-extrabold leading-none">
+                WORKSPACE
+              </div>
+              <div className="text-sm sm:text-base font-extrabold text-white tracking-tight leading-tight mt-0.5">
+                QLPL Demo
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Right: Status badge & User Profile pill & Theme Toggle */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Status Badge */}
-            <div className="badge-available">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="hidden xs:inline">System online</span>
-            </div>
-
-            {/* User Profile pill */}
-            <div
-              onClick={() => setCurrentView("profile")}
-              className="flex items-center gap-2.5 p-1 pr-3 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 hover:border-indigo-400 transition cursor-pointer shadow-2xs"
-            >
-              <img
-                src={user.avatar}
-                alt="Avatar"
-                className="w-7 h-7 rounded-full object-cover border border-indigo-400/80"
-              />
-              <span className="hidden md:inline text-xs font-bold text-slate-800 dark:text-slate-200">
-                {user.fullName}
-              </span>
-            </div>
-
-            {/* Theme Toggle (Light / Dark Mode) */}
-            <button
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              title={theme === "light" ? "Chuyển sang Dark Mode" : "Chuyển sang Light Mode"}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition shadow-2xs"
-            >
-              {theme === "light" ? (
-                <Moon className="w-4 h-4 text-slate-600" />
-              ) : (
-                <Sun className="w-4 h-4 text-amber-400" />
-              )}
-            </button>
-
-            {/* Logout */}
-            <button
-              onClick={() => {
-                setIsLoggedIn(false);
-                setCurrentView("login");
-                showToast("Đã đăng xuất tài khoản", "info");
-              }}
-              title="Đăng xuất"
-              className="p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-400 hover:text-rose-500 transition shadow-2xs"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+        {/* Right: Status badge & User Profile pill */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Status Badge */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
+            <span className="hidden xs:inline">System online</span>
           </div>
-        </header>
 
-        {/* 2. BODY CONTENT: SIDEBAR + MAIN CANVAS */}
-        <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-stretch">
-          
-          {/* LEFT SIDEBAR (Matching Screenshot: Exact Width, Nav and Yellow Role Pill) */}
-          <aside
-            className={`fixed md:sticky top-4 z-30 w-full md:w-56 lg:w-60 app-card p-4 flex flex-col justify-between shrink-0 transition-transform duration-300 md:translate-x-0 ${
-              sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-[110%] md:translate-x-0"
-            }`}
-            style={{ minHeight: "calc(100vh - 6.5rem)" }}
+          {/* User Profile pill */}
+          <div
+            onClick={() => setCurrentView("profile")}
+            className="flex items-center gap-2.5 p-1 pr-3.5 rounded-full bg-white/[0.06] border border-white/[0.12] hover:border-indigo-500/50 hover:bg-white/[0.1] transition cursor-pointer shadow-2xs"
           >
-            <div className="space-y-3">
-              <div className="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase px-2">
-                NAVIGATION
-              </div>
-              
-              <nav className="space-y-1">
-                <button
-                  onClick={() => { setCurrentView("dashboard"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
-                    currentView === "dashboard"
-                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
-                  }`}
-                >
-                  <LayoutDashboard className="w-4 h-4 text-indigo-500 shrink-0" />
-                  <span>Trang chủ</span>
-                </button>
+            <img
+              src={user.avatar}
+              alt="Avatar"
+              className="w-7 h-7 rounded-full object-cover border border-indigo-500/50"
+            />
+            <span className="hidden md:inline text-xs font-bold text-slate-200">
+              {user.fullName}
+            </span>
+          </div>
 
-                <button
-                  onClick={() => { setCurrentView("computers"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
-                    currentView === "computers"
-                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
-                  }`}
-                >
-                  <Monitor className="w-4 h-4 text-purple-500 shrink-0" />
-                  <span>Quản lý máy tính</span>
-                  <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono font-bold">
-                    {computers.length}
-                  </span>
-                </button>
+          {/* Logout */}
+          <button
+            onClick={() => {
+              setIsLoggedIn(false);
+              setCurrentView("login");
+              showToast("Đã đăng xuất tài khoản", "info");
+            }}
+            title="Đăng xuất"
+            className="p-2 rounded-xl bg-white/[0.06] border border-white/[0.12] text-slate-400 hover:text-rose-400 transition shadow-2xs"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
+      </header>
 
-                <button
-                  onClick={() => { setCurrentView("swagger"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
-                    currentView === "swagger"
-                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
-                  }`}
-                >
-                  <FileCode2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>Swagger API</span>
-                  <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold">
-                    REST
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => { setCurrentView("profile"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
-                    currentView === "profile"
-                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
-                  }`}
-                >
-                  <User className="w-4 h-4 text-amber-500 shrink-0" />
-                  <span>Hồ sơ</span>
-                </button>
-              </nav>
+      {/* 2. BODY CONTENT: SIDEBAR + MAIN CANVAS */}
+      <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-stretch">
+        
+        {/* LEFT SIDEBAR (Matching Screenshot: Exact Width, Nav and Yellow Role Pill) */}
+        <aside
+          className={`fixed md:sticky top-4 z-30 w-full md:w-56 lg:w-64 obsidian-card p-4 sm:p-5 flex flex-col justify-between shrink-0 transition-transform duration-300 md:translate-x-0 ${
+            sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-[110%] md:translate-x-0"
+          }`}
+          style={{ minHeight: "calc(100vh - 6.5rem)" }}
+        >
+          <div className="space-y-3">
+            <div className="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase px-2">
+              NAVIGATION
             </div>
-
-            {/* Bottom Role Card (Matching Screenshot: Single clean pill with yellow border) */}
-            <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-2">
-              <div className="w-full py-2.5 px-3 rounded-xl border border-amber-300 dark:border-amber-500/40 bg-amber-50/80 dark:bg-amber-500/10 text-center text-xs font-bold text-amber-800 dark:text-amber-300 shadow-2xs">
-                Vai trò: {user.role}
-              </div>
+            
+            <nav className="space-y-1.5">
+              <button
+                onClick={() => { setCurrentView("dashboard"); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
+                  currentView === "dashboard"
+                    ? "bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 font-bold shadow-sm shadow-indigo-500/15"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.06]"
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4 text-indigo-400 shrink-0" />
+                <span>Trang chủ</span>
+              </button>
 
               <button
-                onClick={() => setCurrentView("login")}
-                className="w-full text-center py-1 text-[11px] font-medium text-slate-400 hover:text-indigo-600 transition"
+                onClick={() => { setCurrentView("computers"); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
+                  currentView === "computers"
+                    ? "bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 font-bold shadow-sm shadow-indigo-500/15"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.06]"
+                }`}
               >
-                Xem trang Đăng nhập (Auth)
+                <Monitor className="w-4 h-4 text-purple-400 shrink-0" />
+                <span>Quản lý máy tính</span>
+                <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold">
+                  {computers.length}
+                </span>
               </button>
+
+              <button
+                onClick={() => { setCurrentView("swagger"); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
+                  currentView === "swagger"
+                    ? "bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 font-bold shadow-sm shadow-indigo-500/15"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.06]"
+                }`}
+              >
+                <FileCode2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Swagger API</span>
+                <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                  REST
+                </span>
+              </button>
+
+              <button
+                onClick={() => { setCurrentView("profile"); setSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition ${
+                  currentView === "profile"
+                    ? "bg-indigo-500/15 border border-indigo-500/40 text-indigo-300 font-bold shadow-sm shadow-indigo-500/15"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.06]"
+                }`}
+              >
+                <User className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Hồ sơ</span>
+              </button>
+            </nav>
+          </div>
+
+          {/* Bottom Role Pill (Matching Screenshot: Pill badge with amber border) */}
+          <div className="pt-4 border-t border-white/10 space-y-2">
+            <div className="w-full py-2 px-3 rounded-full border border-amber-400/40 bg-amber-400/10 text-center text-xs font-bold text-amber-300 shadow-sm truncate">
+              Vai trò: {user.role || "Quản trị viên"}
             </div>
-          </aside>
+            <button
+              onClick={() => setCurrentView("login")}
+              className="w-full text-center py-1 text-[11px] font-medium text-slate-400 hover:text-indigo-300 transition"
+            >
+              Xem trang Đăng nhập (Auth)
+            </button>
+          </div>
+        </aside>
 
-          {/* MAIN DISPLAY CANVAS */}
-          <main className="flex-1 min-w-0 w-full flex flex-col gap-4">
-            
-            {/* ============================================================== */}
-            {/* VIEW: DASHBOARD (Matching Reference Screenshot qlpl-demo.vercel.app) */}
-            {/* ============================================================== */}
-            {currentView === "dashboard" && (
-              <div className="space-y-4">
+        {/* MAIN DISPLAY CANVAS */}
+        <main className="flex-1 min-w-0 w-full flex flex-col gap-4">
+          
+          {/* ============================================================== */}
+          {/* VIEW: DASHBOARD (Matching Reference Screenshot in Black Edition) */}
+          {/* ============================================================== */}
+          {currentView === "dashboard" && (
+            <div className="space-y-4">
+              
+              {/* Header Title Section */}
+              <div>
+                <h1 className="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight">
+                  Dashboard
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                  Tổng quan hệ thống phòng máy và người dùng
+                </p>
+              </div>
+
+              {/* 4 TOP KPI CARDS (Matching Screenshot: 2-column flex inside card, icon vertically centered, text contained) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 
-                {/* Header Title Section */}
-                <div>
-                  <h1 className="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-900 dark:text-white">
-                    Dashboard
-                  </h1>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Tổng quan hệ thống phòng máy và người dùng
-                  </p>
-                </div>
-
-                {/* 4 TOP KPI CARDS (Matching Screenshot: Exact 125px height & proportions) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                  
-                  {/* 1. Người dùng */}
-                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Người dùng</span>
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                        <Users className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                {/* 1. Người dùng */}
+                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
+                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                    <span className="text-xs font-medium text-slate-400">Người dùng</span>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
                       42
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng số tài khoản đăng ký">
                       Tổng số tài khoản đăng ký
-                    </div>
+                    </p>
                   </div>
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shrink-0 shadow-inner">
+                    <Users className="w-5 h-5" />
+                  </div>
+                </div>
 
-                  {/* 2. Máy tính */}
-                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Máy tính</span>
-                      <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-                        <Monitor className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                {/* 2. Máy tính */}
+                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
+                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                    <span className="text-xs font-medium text-slate-400">Máy tính</span>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
                       {computers.length}
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng số máy hiện có">
                       Tổng số máy hiện có
-                    </div>
+                    </p>
                   </div>
+                  <div className="w-11 h-11 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0 shadow-inner">
+                    <Monitor className="w-5 h-5" />
+                  </div>
+                </div>
 
-                  {/* 3. Máy đang dùng */}
-                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Máy đang dùng</span>
-                      <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                        <Laptop className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                {/* 3. Máy đang dùng */}
+                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
+                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                    <span className="text-xs font-medium text-slate-400">Máy đang dùng</span>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
                       {inUseCount}
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Máy đang được sử dụng">
                       Máy đang được sử dụng
-                    </div>
+                    </p>
                   </div>
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-inner">
+                    <Laptop className="w-5 h-5" />
+                  </div>
+                </div>
 
-                  {/* 4. Tổng thời gian */}
-                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Tổng thời gian</span>
-                      <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                        <Clock className="w-4 h-4" />
-                      </div>
-                    </div>
-                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                {/* 4. Tổng thời gian */}
+                <div className="obsidian-card-hover p-4 sm:p-5 rounded-2xl flex items-center justify-between min-h-[125px] overflow-hidden">
+                  <div className="flex-1 min-w-0 pr-3 flex flex-col justify-between">
+                    <span className="text-xs font-medium text-slate-400">Tổng thời gian</span>
+                    <div className="text-3xl sm:text-4xl font-extrabold text-white my-1 leading-none tracking-tight">
                       128.5h
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <p className="text-[11px] sm:text-xs text-slate-400 truncate" title="Tổng thời gian đã sử dụng">
                       Tổng thời gian đã sử dụng
-                    </div>
+                    </p>
                   </div>
-
-                </div>
-
-                {/* 2 MAIN LOWER PANELS: MÁY THEO TRẠNG THÁI & BIỂU ĐỒ THỜI GIAN THỰC */}
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
-                  
-                  {/* Left Panel: Máy theo trạng thái (5 cols) */}
-                  <div className="xl:col-span-5 app-card p-5 flex flex-col justify-between min-h-[350px]">
-                    <div>
-                      <div className="flex items-center justify-between mb-5">
-                        <div>
-                          <h2 className="text-base font-extrabold text-slate-800 dark:text-white tracking-tight">
-                            Máy theo trạng thái
-                          </h2>
-                          <p className="text-[11px] text-slate-400 mt-0.5">Phân bổ thiết bị trong phòng lab</p>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
-                          {computers.length} TOTAL
-                        </span>
-                      </div>
-
-                      <div className="space-y-3.5">
-                        {/* Có sẵn */}
-                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
-                          <div className="flex items-center justify-between text-xs mb-1.5">
-                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm" />
-                              Có sẵn
-                            </span>
-                            <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-xs">
-                              {availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)
-                            </span>
-                          </div>
-                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                              style={{ width: `${computers.length ? (availableCount / computers.length) * 100 : 0}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Đang sử dụng */}
-                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
-                          <div className="flex items-center justify-between text-xs mb-1.5">
-                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
-                              <span className="w-2 h-2 rounded-full bg-amber-500 shadow-sm" />
-                              Đang sử dụng
-                            </span>
-                            <span className="font-extrabold text-amber-600 dark:text-amber-400 text-xs">
-                              {inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)
-                            </span>
-                          </div>
-                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-amber-500 rounded-full transition-all duration-500"
-                              style={{ width: `${computers.length ? (inUseCount / computers.length) * 100 : 0}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Bảo trì */}
-                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
-                          <div className="flex items-center justify-between text-xs mb-1.5">
-                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
-                              <span className="w-2 h-2 rounded-full bg-rose-500 shadow-sm" />
-                              Bảo trì
-                            </span>
-                            <span className="font-extrabold text-rose-600 dark:text-rose-400 text-xs">
-                              {maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)
-                            </span>
-                          </div>
-                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-rose-500 rounded-full transition-all duration-500"
-                              style={{ width: `${computers.length ? (maintenanceCount / computers.length) * 100 : 0}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Room Breakdown Footer */}
-                    <div className="mt-5 pt-4 border-t border-slate-150 dark:border-white/10 grid grid-cols-2 gap-3">
-                      <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.06] text-center">
-                        <div className="text-[10px] text-slate-400">Phòng C201</div>
-                        <div className="text-xs font-bold text-slate-800 dark:text-white mt-0.5">4 máy (100% OK)</div>
-                      </div>
-                      <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.06] text-center">
-                        <div className="text-[10px] text-slate-400">Phòng C202</div>
-                        <div className="text-xs font-bold text-slate-800 dark:text-white mt-0.5">2 máy (1 Đang dùng)</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Panel: Thời gian sử dụng theo máy (7 cols) */}
-                  <div className="xl:col-span-7 app-card p-5 flex flex-col justify-between min-h-[350px]">
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <h2 className="text-base font-extrabold text-slate-800 dark:text-white tracking-tight">
-                            Thời gian sử dụng theo máy
-                          </h2>
-                          <p className="text-[11px] text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="hidden sm:inline text-xs text-slate-500 dark:text-slate-400">
-                            Cao điểm: <strong className="text-indigo-600 dark:text-indigo-400 font-bold">11:00 (95%)</strong>
-                          </span>
-                          <span className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                            LIVE
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Bar Chart Container */}
-                      <div className="relative h-[210px] w-full flex items-end justify-between gap-2.5 pt-8 pb-3 px-4 bg-slate-50/80 dark:bg-[#080d1a] rounded-xl border border-slate-150 dark:border-white/10 mt-3">
-                        <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
-                          <div className="border-b border-dashed border-slate-400 w-full" />
-                          <div className="border-b border-dashed border-slate-400 w-full" />
-                          <div className="border-b border-dashed border-slate-400 w-full" />
-                        </div>
-
-                        {[
-                          { time: "07:00", val: 30, label: "M01" },
-                          { time: "09:00", val: 85, label: "M02" },
-                          { time: "11:00", val: 95, label: "M03" },
-                          { time: "13:00", val: 50, label: "M04" },
-                          { time: "15:00", val: 90, label: "M05" },
-                          { time: "17:00", val: 75, label: "M06" },
-                          { time: "19:00", val: 40, label: "M01" },
-                          { time: "21:00", val: 20, label: "M04" }
-                        ].map((item, idx) => (
-                          <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
-                            <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none z-20">
-                              {item.label}: {item.val}% tải
-                            </div>
-
-                            <div className="w-full max-w-[36px] h-[130px] bg-slate-200/80 dark:bg-slate-800/60 rounded-lg flex items-end overflow-hidden">
-                              <div
-                                className="w-full rounded-lg bg-gradient-to-t from-indigo-600 to-indigo-400 group-hover:brightness-110 transition-all duration-300"
-                                style={{ height: `${item.val}%` }}
-                              />
-                            </div>
-
-                            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">
-                              {item.time}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-2.5 border-t border-slate-150 dark:border-white/10">
-                      <span className="flex items-center gap-1.5 font-medium">
-                        <Activity className="w-3.5 h-3.5 text-indigo-500" />
-                        Cập nhật tự động mỗi 5 giây
-                      </span>
-                      <button
-                        onClick={() => showToast("Đã làm mới dữ liệu biểu đồ!")}
-                        className="flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold transition"
-                      >
-                        <RotateCcw className="w-3 h-3" /> Làm mới
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* 3. RECENT ACTIVITY ON DASHBOARD */}
-                <div className="app-card p-5 space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-150 dark:border-white/10">
-                    <div>
-                      <h2 className="text-base font-extrabold text-slate-800 dark:text-white">Yêu cầu mượn máy gần đây</h2>
-                      <p className="text-[11px] text-slate-400">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
-                    </div>
-                    <button
-                      onClick={() => setCurrentView("computers")}
-                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1"
-                    >
-                      Xem tất cả trong Quản lý máy tính <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
-                      <thead>
-                        <tr className="border-b border-slate-150 dark:border-white/10 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
-                          <th className="py-2.5 px-3">Mã máy</th>
-                          <th className="py-2.5 px-3">Người yêu cầu</th>
-                          <th className="py-2.5 px-3">Lý do mượn</th>
-                          <th className="py-2.5 px-3">Thời lượng</th>
-                          <th className="py-2.5 px-3">Trạng thái</th>
-                          <th className="py-2.5 px-3 text-right">Hành động</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-150 dark:divide-white/[0.06]">
-                        {requests.slice(0, 3).map((req) => (
-                          <tr key={req.id} className="hover:bg-slate-50/80 dark:hover:bg-white/[0.03] transition">
-                            <td className="py-3 px-3 font-bold text-slate-800 dark:text-white font-mono text-xs">
-                              {req.computerName}
-                            </td>
-                            <td className="py-3 px-3 text-slate-700 dark:text-slate-200">
-                              <span className="font-semibold text-slate-800 dark:text-white">{req.requester}</span>
-                              {req.requesterId && (
-                                <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
-                              )}
-                            </td>
-                            <td className="py-3 px-3 text-slate-500 dark:text-slate-300 max-w-xs truncate font-medium">
-                              {req.reason || "Không có lý do"}
-                            </td>
-                            <td className="py-3 px-3 text-slate-500 dark:text-slate-400 font-semibold">
-                              {req.duration}
-                            </td>
-                            <td className="py-3 px-3">
-                              {req.status === "approved" && (
-                                <span className="badge-available">Đã duyệt</span>
-                              )}
-                              {req.status === "pending" && (
-                                <span className="badge-pending">Chờ duyệt</span>
-                              )}
-                              {req.status === "rejected" && (
-                                <span className="badge-maintenance">Từ chối</span>
-                              )}
-                            </td>
-                            <td className="py-3 px-3 text-right">
-                              {req.status === "pending" ? (
-                                <div className="flex items-center justify-end gap-1.5">
-                                  <button
-                                    onClick={() => handleUpdateRequestStatus(req.id, "approved")}
-                                    className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/30 border border-emerald-200 dark:border-emerald-500/40 text-xs font-bold transition shadow-xs"
-                                  >
-                                    Duyệt
-                                  </button>
-                                  <button
-                                    onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
-                                    className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/30 border border-rose-200 dark:border-rose-500/40 text-xs font-bold transition shadow-xs"
-                                  >
-                                    Từ chối
-                                  </button>
-                                </div>
-                              ) : (
-                                <span className="text-xs text-slate-400 font-medium">Hoàn tất</span>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0 shadow-inner">
+                    <Clock className="w-5 h-5" />
                   </div>
                 </div>
 
               </div>
-            )}
+
+              {/* 2 MAIN LOWER PANELS: MÁY THEO TRẠNG THÁI & BIỂU ĐỒ THỜI GIAN THỰC */}
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
+                
+                {/* Left Panel: Máy theo trạng thái (5 cols) */}
+                <div className="xl:col-span-5 obsidian-card p-5 flex flex-col justify-between min-h-[350px]">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h2 className="text-base font-extrabold text-white tracking-tight">
+                          Máy theo trạng thái
+                        </h2>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Phân bổ thiết bị trong phòng lab</p>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-white/5 text-slate-300 border border-white/10">
+                        {computers.length} TOTAL
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {/* Có sẵn */}
+                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 pointer-events-none transition-all duration-500"
+                          style={{ width: `${computers.length ? (availableCount / computers.length) * 100 : 0}%` }}
+                        />
+                        <div className="relative z-10 flex items-center gap-2.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-400" />
+                          <span className="text-xs font-bold text-white">Có sẵn</span>
+                        </div>
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-emerald-400">
+                          {availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)
+                        </div>
+                      </div>
+
+                      {/* Đang sử dụng */}
+                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-amber-500/10 pointer-events-none transition-all duration-500"
+                          style={{ width: `${computers.length ? (inUseCount / computers.length) * 100 : 0}%` }}
+                        />
+                        <div className="relative z-10 flex items-center gap-2.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-xs shadow-amber-400" />
+                          <span className="text-xs font-bold text-white">Đang sử dụng</span>
+                        </div>
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-amber-400">
+                          {inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)
+                        </div>
+                      </div>
+
+                      {/* Bảo trì */}
+                      <div className="relative p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.08] overflow-hidden flex items-center justify-between">
+                        <div
+                          className="absolute left-0 top-0 bottom-0 bg-rose-500/10 pointer-events-none transition-all duration-500"
+                          style={{ width: `${computers.length ? (maintenanceCount / computers.length) * 100 : 0}%` }}
+                        />
+                        <div className="relative z-10 flex items-center gap-2.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-xs shadow-rose-400" />
+                          <span className="text-xs font-bold text-white">Bảo trì</span>
+                        </div>
+                        <div className="relative z-10 font-mono text-xs font-extrabold text-rose-400">
+                          {maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Room Breakdown Footer */}
+                  <div className="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-2.5">
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
+                      <div className="text-[10px] text-slate-400">Phòng C201</div>
+                      <div className="text-xs font-bold text-white mt-0.5 truncate">4 máy (100% OK)</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center truncate">
+                      <div className="text-[10px] text-slate-400">Phòng C202</div>
+                      <div className="text-xs font-bold text-white mt-0.5 truncate">2 máy (1 Đang dùng)</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Panel: Thời gian sử dụng theo máy (7 cols) */}
+                <div className="xl:col-span-7 obsidian-card p-5 flex flex-col justify-between min-h-[350px]">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h2 className="text-base font-extrabold text-white tracking-tight">
+                          Thời gian sử dụng theo máy
+                        </h2>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="hidden sm:inline text-xs text-slate-400">
+                          Cao điểm: <strong className="text-indigo-400 font-bold">11:00 (95%)</strong>
+                        </span>
+                        <span className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                          LIVE
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bar Chart Container */}
+                    <div className="relative h-[210px] w-full flex items-end justify-between gap-2 pt-8 pb-3 px-3 bg-[#080d1a] rounded-xl border border-white/10 mt-3 shadow-inner">
+                      <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
+                        <div className="border-b border-dashed border-slate-500 w-full" />
+                        <div className="border-b border-dashed border-slate-500 w-full" />
+                        <div className="border-b border-dashed border-slate-500 w-full" />
+                      </div>
+
+                      {[
+                        { time: "07:00", val: 30, label: "M01" },
+                        { time: "09:00", val: 85, label: "M02" },
+                        { time: "11:00", val: 95, label: "M03" },
+                        { time: "13:00", val: 50, label: "M04" },
+                        { time: "15:00", val: 90, label: "M05" },
+                        { time: "17:00", val: 75, label: "M06" },
+                        { time: "19:00", val: 40, label: "M01" },
+                        { time: "21:00", val: 20, label: "M04" }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
+                          <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/60 text-white text-[10px] px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none z-20">
+                            {item.label}: {item.val}%
+                          </div>
+                          <div className="w-full max-w-[34px] h-[130px] bg-slate-800/80 rounded-lg flex items-end overflow-hidden">
+                            <div
+                              className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-md shadow-indigo-500/30"
+                              style={{ height: `${item.val}%` }}
+                            />
+                          </div>
+                          <span className="text-[11px] text-slate-400 group-hover:text-indigo-300 font-mono font-bold">
+                            {item.time}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-2.5 border-t border-white/10">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <Activity className="w-3.5 h-3.5 text-indigo-400" />
+                      Cập nhật tự động mỗi 5 giây
+                    </span>
+                    <button
+                      onClick={() => showToast("Đã làm mới dữ liệu biểu đồ!")}
+                      className="flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-bold transition"
+                    >
+                      <RotateCcw className="w-3 h-3" /> Làm mới
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* 3. RECENT ACTIVITY ON DASHBOARD */}
+              <div className="obsidian-card p-5 space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                  <div>
+                    <h2 className="text-base font-bold text-white">Yêu cầu mượn máy gần đây</h2>
+                    <p className="text-[11px] text-slate-400">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
+                  </div>
+                  <button
+                    onClick={() => setCurrentView("computers")}
+                    className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+                  >
+                    Xem tất cả trong Quản lý máy tính <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/10 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
+                        <th className="py-2.5 px-3">Mã máy</th>
+                        <th className="py-2.5 px-3">Người yêu cầu</th>
+                        <th className="py-2.5 px-3">Lý do mượn</th>
+                        <th className="py-2.5 px-3">Thời lượng</th>
+                        <th className="py-2.5 px-3">Trạng thái</th>
+                        <th className="py-2.5 px-3 text-right">Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/[0.06]">
+                      {requests.slice(0, 3).map((req) => (
+                        <tr key={req.id} className="hover:bg-white/[0.03] transition">
+                          <td className="py-3 px-3 font-bold text-white font-mono text-xs whitespace-nowrap">
+                            {req.computerName}
+                          </td>
+                          <td className="py-3 px-3 text-slate-200 whitespace-nowrap">
+                            <span className="font-semibold text-white">{req.requester}</span>
+                            {req.requesterId && (
+                              <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-3 text-slate-300 max-w-xs truncate font-medium">
+                            {req.reason || "Không có lý do"}
+                          </td>
+                          <td className="py-3 px-3 text-slate-400 font-semibold whitespace-nowrap">
+                            {req.duration}
+                          </td>
+                          <td className="py-3 px-3 whitespace-nowrap">
+                            {req.status === "approved" && (
+                              <span className="badge-available">Đã duyệt</span>
+                            )}
+                            {req.status === "pending" && (
+                              <span className="badge-pending">Chờ duyệt</span>
+                            )}
+                            {req.status === "rejected" && (
+                              <span className="badge-maintenance">Từ chối</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-3 text-right whitespace-nowrap">
+                            {req.status === "pending" ? (
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => handleUpdateRequestStatus(req.id, "approved")}
+                                  className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold transition shadow-xs"
+                                >
+                                  Duyệt
+                                </button>
+                                <button
+                                  onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
+                                  className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold transition shadow-xs"
+                                >
+                                  Từ chối
+                                </button>
+                              </div>
+                            ) : (
+                              <span className="text-xs text-slate-500 font-medium">Hoàn tất</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          )}
 
             {/* ============================================================== */}
             {/* VIEW: QUẢN LÝ MÁY TÍNH (Screenshot 3) */}
@@ -1148,7 +1116,7 @@ export default function Home() {
 
                 {/* MAIN CONTENT SPLIT: LEFT LIST (M04, M03, M02, M01...) & RIGHT FORM (Đăng ký mượn máy) */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                  
+
                   {/* Left: Danh sách máy trong phòng (7 cols) */}
                   <div className="lg:col-span-7 obsidian-card p-6 lg:p-7 space-y-5">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
@@ -1197,7 +1165,7 @@ export default function Home() {
                               <div className="flex items-center gap-2.5">
                                 <span className="text-base font-bold text-white">{comp.name}</span>
                                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-slate-300 font-mono font-bold">
-                                {comp.room}
+                                  {comp.room}
                                 </span>
                               </div>
                               <div className="text-xs text-slate-400 mt-1 flex items-center gap-2">
@@ -1422,13 +1390,13 @@ export default function Home() {
                 {/* Main Profile Card */}
                 <div className="obsidian-card p-6 md:p-10">
                   <form onSubmit={handleProfileSave} className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    
+
                     {/* Left Column: Avatar */}
                     <div className="md:col-span-4 flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.03] border border-white/10 text-center">
                       <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5">
                         Ảnh đại diện
                       </div>
-                      
+
                       <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-indigo-500/50 shadow-2xl shadow-indigo-500/30">
                         <img
                           src={user.avatar}
@@ -1707,8 +1675,6 @@ export default function Home() {
 
           </main>
         </div>
-
-      </div>
 
       {/* MODAL: THÊM MÁY TÍNH MỚI */}
       {isAddModalOpen && (
