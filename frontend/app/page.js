@@ -30,7 +30,9 @@ import {
   TrendingUp,
   Activity,
   Cpu,
-  HardDrive
+  HardDrive,
+  Sun,
+  Moon
 } from "lucide-react";
 
 // Default Mock Data
@@ -156,6 +158,7 @@ export default function Home() {
   const [currentView, setCurrentView] = useState("dashboard"); // login, dashboard, computers, swagger, profile
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [theme, setTheme] = useState("light"); // light (default matching reference), dark
 
   // App Data State
   const [user, setUser] = useState(INITIAL_USER);
@@ -547,78 +550,84 @@ export default function Home() {
   // MAIN APPLICATION LAYOUT (Screenshot 2, 3, 4 with Refined Proportions)
   // -------------------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#070a12] text-slate-100 flex flex-col p-4 md:p-6 lg:p-8">
+    <div className={`min-h-screen w-full transition-colors duration-200 ${theme === "dark" ? "dark bg-[#07090e] text-slate-100" : "bg-[#f1f4fb] text-slate-800"}`}>
       
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-2xl border border-indigo-500/50 bg-[#12192c]/95 backdrop-blur-2xl shadow-2xl shadow-indigo-500/40 text-white animate-bounce-short">
-          <Sparkles className="w-5 h-5 text-indigo-400 shrink-0" />
-          <span className="text-sm font-semibold">{toast.message}</span>
+        <div className="fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-[#12192c]/95 dark:bg-[#12192c]/95 text-white shadow-xl animate-bounce-short">
+          <Sparkles className="w-4 h-4 text-indigo-400 shrink-0" />
+          <span className="text-xs font-semibold">{toast.message}</span>
         </div>
       )}
 
-      {/* INNER CONTAINER TO KEEP GOLDEN RATIO PROPORTIONS ON WIDE SCREENS */}
-      <div className="w-full max-w-[1720px] 2xl:max-w-[1820px] mx-auto flex flex-col gap-6 lg:gap-7">
+      {/* FULL-WIDTH FLUID CONTAINER MATCHING SCREENSHOT */}
+      <div className="w-full min-h-screen p-3 sm:p-4 lg:p-5 flex flex-col gap-4">
 
-        {/* 1. TOP NAVBAR (Floating Card with Rich Spacing) */}
-        <header className="w-full obsidian-card px-6 py-4 flex items-center justify-between shadow-2xl border border-white/15">
+        {/* 1. TOP NAVBAR (Matching Screenshot: Sleek, compact white/dark floating card) */}
+        <header className="w-full app-card px-4 sm:px-5 py-3 flex items-center justify-between shadow-xs">
           
           {/* Left: Mobile Toggle & Brand Logo */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/15 text-slate-300 hover:text-white"
+              className="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-indigo-600"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4" />
             </button>
 
             <div
-              className="flex items-center gap-3.5 cursor-pointer group"
+              className="flex items-center gap-2.5 cursor-pointer group"
               onClick={() => setCurrentView("dashboard")}
             >
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[2px] shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition">
-                <div className="w-full h-full bg-[#0d1324] rounded-[14px] flex items-center justify-center font-extrabold text-lg text-white">
-                  Q
-                </div>
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-extrabold flex items-center justify-center text-sm shadow-sm group-hover:scale-105 transition">
+                Q
               </div>
               <div>
-                <div className="text-[11px] tracking-widest uppercase text-indigo-400 font-extrabold leading-tight">
+                <div className="text-[10px] tracking-wider uppercase text-indigo-600 dark:text-indigo-400 font-extrabold leading-none">
                   WORKSPACE
                 </div>
-                <div className="text-base font-extrabold text-white tracking-wide">
-                  QLPL Demo <span className="text-xs text-slate-400 font-medium ml-1">Black Edition</span>
+                <div className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
+                  QLPL Demo
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right: Status badge & User Profile pill */}
-          <div className="flex items-center gap-3 md:gap-4">
+          {/* Right: Status badge & User Profile pill & Theme Toggle */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
             {/* Status Badge */}
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-950/50 border border-emerald-500/40 text-xs font-bold text-emerald-400 shadow-md shadow-emerald-500/15">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>System online</span>
+            <div className="badge-available">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="hidden xs:inline">System online</span>
             </div>
 
             {/* User Profile pill */}
             <div
               onClick={() => setCurrentView("profile")}
-              className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-white/[0.06] border border-white/[0.15] hover:border-indigo-500/60 hover:bg-white/[0.1] transition cursor-pointer shadow-md"
+              className="flex items-center gap-2.5 p-1 pr-3 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 hover:border-indigo-400 transition cursor-pointer shadow-2xs"
             >
               <img
                 src={user.avatar}
                 alt="Avatar"
-                className="w-9 h-9 rounded-full object-cover border-2 border-indigo-500/50"
+                className="w-7 h-7 rounded-full object-cover border border-indigo-400/80"
               />
-              <div className="hidden md:flex flex-col text-left">
-                <span className="text-xs font-bold text-white leading-tight">
-                  {user.fullName}
-                </span>
-                <span className="text-[10px] text-indigo-300 font-medium">
-                  {user.role}
-                </span>
-              </div>
+              <span className="hidden md:inline text-xs font-bold text-slate-800 dark:text-slate-200">
+                {user.fullName}
+              </span>
             </div>
+
+            {/* Theme Toggle (Light / Dark Mode) */}
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              title={theme === "light" ? "Chuyển sang Dark Mode" : "Chuyển sang Light Mode"}
+              className="p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-indigo-600 transition shadow-2xs"
+            >
+              {theme === "light" ? (
+                <Moon className="w-4 h-4 text-slate-600" />
+              ) : (
+                <Sun className="w-4 h-4 text-amber-400" />
+              )}
+            </button>
 
             {/* Logout */}
             <button
@@ -628,7 +637,7 @@ export default function Home() {
                 showToast("Đã đăng xuất tài khoản", "info");
               }}
               title="Đăng xuất"
-              className="p-2.5 rounded-xl bg-white/[0.06] border border-white/[0.15] text-slate-400 hover:text-rose-400 hover:border-rose-500/40 transition shadow-sm"
+              className="p-2 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-400 hover:text-rose-500 transition shadow-2xs"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -636,91 +645,86 @@ export default function Home() {
         </header>
 
         {/* 2. BODY CONTENT: SIDEBAR + MAIN CANVAS */}
-        <div className="flex-1 flex flex-col md:flex-row gap-6 items-start">
+        <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-stretch">
           
-          {/* LEFT SIDEBAR (Sticky, Natural Height, No Infinite Void) */}
+          {/* LEFT SIDEBAR (Matching Screenshot: Exact Width, Nav and Yellow Role Pill) */}
           <aside
-            className={`fixed md:sticky top-6 z-30 w-full md:w-64 lg:w-72 obsidian-card p-5 flex flex-col justify-between shrink-0 transition-transform duration-300 md:translate-x-0 ${
+            className={`fixed md:sticky top-4 z-30 w-full md:w-56 lg:w-60 app-card p-4 flex flex-col justify-between shrink-0 transition-transform duration-300 md:translate-x-0 ${
               sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-[110%] md:translate-x-0"
             }`}
+            style={{ minHeight: "calc(100vh - 6.5rem)" }}
           >
-            <div className="space-y-4">
-              <div className="text-xs font-extrabold tracking-wider text-slate-400 uppercase px-3">
+            <div className="space-y-3">
+              <div className="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase px-2">
                 NAVIGATION
               </div>
               
-              <nav className="space-y-2">
+              <nav className="space-y-1">
                 <button
                   onClick={() => { setCurrentView("dashboard"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                     currentView === "dashboard"
-                      ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
                   }`}
                 >
-                  <LayoutDashboard className="w-5 h-5 text-indigo-400 shrink-0" />
+                  <LayoutDashboard className="w-4 h-4 text-indigo-500 shrink-0" />
                   <span>Trang chủ</span>
                 </button>
 
                 <button
                   onClick={() => { setCurrentView("computers"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                     currentView === "computers"
-                      ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
                   }`}
                 >
-                  <Monitor className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <Monitor className="w-4 h-4 text-purple-500 shrink-0" />
                   <span>Quản lý máy tính</span>
-                  <span className="ml-auto text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold">
+                  <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 font-mono font-bold">
                     {computers.length}
                   </span>
                 </button>
 
                 <button
                   onClick={() => { setCurrentView("swagger"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                     currentView === "swagger"
-                      ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
                   }`}
                 >
-                  <FileCode2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <FileCode2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Swagger API</span>
-                  <span className="ml-auto text-[11px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                  <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold">
                     REST
                   </span>
                 </button>
 
                 <button
                   onClick={() => { setCurrentView("profile"); setSidebarOpen(false); }}
-                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                     currentView === "profile"
-                      ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
-                      : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-indigo-50/90 dark:bg-indigo-600/25 border border-indigo-200/80 dark:border-indigo-500/50 text-indigo-600 dark:text-white font-bold shadow-2xs"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-white/5"
                   }`}
                 >
-                  <User className="w-5 h-5 text-amber-400 shrink-0" />
+                  <User className="w-4 h-4 text-amber-500 shrink-0" />
                   <span>Hồ sơ</span>
                 </button>
               </nav>
             </div>
 
-            {/* Bottom Role Card (Matching Screenshot "Vai trò: Quản trị viên") */}
-            <div className="pt-6 mt-6 border-t border-white/10 space-y-3">
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 to-amber-600/5 border border-amber-500/40 flex items-center gap-3 shadow-md shadow-amber-500/10">
-                <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-5 h-5 text-amber-400" />
-                </div>
-                <div className="truncate">
-                  <div className="text-xs font-bold text-amber-300">Vai trò: {user.role}</div>
-                  <div className="text-[11px] text-amber-400/80">Toàn quyền hệ thống</div>
-                </div>
+            {/* Bottom Role Card (Matching Screenshot: Single clean pill with yellow border) */}
+            <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-2">
+              <div className="w-full py-2.5 px-3 rounded-xl border border-amber-300 dark:border-amber-500/40 bg-amber-50/80 dark:bg-amber-500/10 text-center text-xs font-bold text-amber-800 dark:text-amber-300 shadow-2xs">
+                Vai trò: {user.role}
               </div>
 
               <button
                 onClick={() => setCurrentView("login")}
-                className="w-full text-center py-2 text-xs font-medium text-slate-400 hover:text-indigo-300 transition"
+                className="w-full text-center py-1 text-[11px] font-medium text-slate-400 hover:text-indigo-600 transition"
               >
                 Xem trang Đăng nhập (Auth)
               </button>
@@ -728,178 +732,164 @@ export default function Home() {
           </aside>
 
           {/* MAIN DISPLAY CANVAS */}
-          <main className="flex-1 min-w-0 w-full flex flex-col space-y-6">
+          <main className="flex-1 min-w-0 w-full flex flex-col gap-4">
             
             {/* ============================================================== */}
-            {/* VIEW: DASHBOARD (Screenshot 2) */}
+            {/* VIEW: DASHBOARD (Matching Reference Screenshot qlpl-demo.vercel.app) */}
             {/* ============================================================== */}
             {currentView === "dashboard" && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 
                 {/* Header Title Section */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
-                      Dashboard
-                    </h1>
-                    <p className="text-sm text-slate-400 mt-1">
-                      Tổng quan hệ thống phòng máy và người dùng
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-xs text-slate-400 font-semibold">Trạng thái:</span>
-                    <span className="badge-available">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" /> Hoạt động bình thường
-                    </span>
-                  </div>
+                <div>
+                  <h1 className="text-2xl sm:text-[26px] font-extrabold tracking-tight text-slate-900 dark:text-white">
+                    Dashboard
+                  </h1>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Tổng quan hệ thống phòng máy và người dùng
+                  </p>
                 </div>
 
-                {/* 4 TOP KPI CARDS (3-Tier Vertical Hierarchy for Perfect Proportions) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                {/* 4 TOP KPI CARDS (Matching Screenshot: Exact 125px height & proportions) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                   
                   {/* 1. Người dùng */}
-                  <div className="obsidian-card-hover p-6 lg:p-7 flex flex-col justify-between min-h-[175px] group">
+                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Người dùng</span>
-                      <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-400 group-hover:scale-110 group-hover:border-indigo-400/70 transition-all duration-300 shadow-lg shadow-indigo-500/20">
-                        <Users className="w-6 h-6" />
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Người dùng</span>
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                        <Users className="w-4 h-4" />
                       </div>
                     </div>
-                    <div className="my-3">
-                      <div className="text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-none font-sans">
-                        42
-                      </div>
+                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                      42
                     </div>
-                    <div className="flex items-center gap-2 pt-2.5 border-t border-white/[0.08] text-xs text-slate-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
-                      <span>Tổng số tài khoản đăng ký</span>
+                    <div className="text-[11px] text-slate-400">
+                      Tổng số tài khoản đăng ký
                     </div>
                   </div>
 
                   {/* 2. Máy tính */}
-                  <div className="obsidian-card-hover p-6 lg:p-7 flex flex-col justify-between min-h-[175px] group">
+                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Máy tính</span>
-                      <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border border-purple-500/40 flex items-center justify-center text-purple-400 group-hover:scale-110 group-hover:border-purple-400/70 transition-all duration-300 shadow-lg shadow-purple-500/20">
-                        <Monitor className="w-6 h-6" />
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Máy tính</span>
+                      <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                        <Monitor className="w-4 h-4" />
                       </div>
                     </div>
-                    <div className="my-3">
-                      <div className="text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-none font-sans">
-                        {computers.length}
-                      </div>
+                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                      {computers.length}
                     </div>
-                    <div className="flex items-center gap-2 pt-2.5 border-t border-white/[0.08] text-xs text-slate-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
-                      <span>Tổng số máy hiện có</span>
+                    <div className="text-[11px] text-slate-400">
+                      Tổng số máy hiện có
                     </div>
                   </div>
 
                   {/* 3. Máy đang dùng */}
-                  <div className="obsidian-card-hover p-6 lg:p-7 flex flex-col justify-between min-h-[175px] group">
+                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Máy đang dùng</span>
-                      <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:border-amber-400/70 transition-all duration-300 shadow-lg shadow-amber-500/20">
-                        <Laptop className="w-6 h-6" />
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Máy đang dùng</span>
+                      <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                        <Laptop className="w-4 h-4" />
                       </div>
                     </div>
-                    <div className="my-3">
-                      <div className="text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-none font-sans">
-                        {inUseCount}
-                      </div>
+                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                      {inUseCount}
                     </div>
-                    <div className="flex items-center gap-2 pt-2.5 border-t border-white/[0.08] text-xs text-slate-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
-                      <span>Máy đang được sử dụng</span>
+                    <div className="text-[11px] text-slate-400">
+                      Máy đang được sử dụng
                     </div>
                   </div>
 
                   {/* 4. Tổng thời gian */}
-                  <div className="obsidian-card-hover p-6 lg:p-7 flex flex-col justify-between min-h-[175px] group">
+                  <div className="app-card-hover p-4 sm:p-5 flex flex-col justify-between h-[125px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Tổng thời gian</span>
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:border-emerald-400/70 transition-all duration-300 shadow-lg shadow-emerald-500/20">
-                        <Clock className="w-6 h-6" />
+                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Tổng thời gian</span>
+                      <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                        <Clock className="w-4 h-4" />
                       </div>
                     </div>
-                    <div className="my-3">
-                      <div className="text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-none font-sans">
-                        128.5h
-                      </div>
+                    <div className="text-3xl font-extrabold text-slate-900 dark:text-white leading-none">
+                      128.5h
                     </div>
-                    <div className="flex items-center gap-2 pt-2.5 border-t border-white/[0.08] text-xs text-slate-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                      <span>Tổng thời gian đã sử dụng</span>
+                    <div className="text-[11px] text-slate-400">
+                      Tổng thời gian đã sử dụng
                     </div>
                   </div>
 
                 </div>
 
                 {/* 2 MAIN LOWER PANELS: MÁY THEO TRẠNG THÁI & BIỂU ĐỒ THỜI GIAN THỰC */}
-                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-stretch">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch">
                   
                   {/* Left Panel: Máy theo trạng thái (5 cols) */}
-                  <div className="xl:col-span-5 obsidian-card p-6 lg:p-7 flex flex-col justify-between">
+                  <div className="xl:col-span-5 app-card p-5 flex flex-col justify-between min-h-[350px]">
                     <div>
-                      <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center justify-between mb-5">
                         <div>
-                          <h2 className="text-lg font-extrabold text-white tracking-tight">
+                          <h2 className="text-base font-extrabold text-slate-800 dark:text-white tracking-tight">
                             Máy theo trạng thái
                           </h2>
-                          <p className="text-xs text-slate-400 mt-1">Phân bổ thiết bị trong phòng lab</p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">Phân bổ thiết bị trong phòng lab</p>
                         </div>
-                        <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-full bg-white/10 text-white border border-white/15">
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
                           {computers.length} TOTAL
                         </span>
                       </div>
 
-                      <div className="space-y-4">
+                      <div className="space-y-3.5">
                         {/* Có sẵn */}
-                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-emerald-500/50 transition">
-                          <div className="flex items-center justify-between text-xs mb-2.5">
-                            <span className="flex items-center gap-2.5 font-bold text-white">
-                              <span className="w-3 h-3 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400" />
+                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm" />
                               Có sẵn
                             </span>
-                            <span className="font-extrabold text-emerald-400 text-sm">{availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)</span>
+                            <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-xs">
+                              {availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)
+                            </span>
                           </div>
-                          <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-emerald-500 rounded-full transition-all duration-500 shadow-md shadow-emerald-500/50"
+                              className="h-full bg-emerald-500 rounded-full transition-all duration-500"
                               style={{ width: `${computers.length ? (availableCount / computers.length) * 100 : 0}%` }}
                             />
                           </div>
                         </div>
 
                         {/* Đang sử dụng */}
-                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-500/50 transition">
-                          <div className="flex items-center justify-between text-xs mb-2.5">
-                            <span className="flex items-center gap-2.5 font-bold text-white">
-                              <span className="w-3 h-3 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
+                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
+                              <span className="w-2 h-2 rounded-full bg-amber-500 shadow-sm" />
                               Đang sử dụng
                             </span>
-                            <span className="font-extrabold text-amber-400 text-sm">{inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)</span>
+                            <span className="font-extrabold text-amber-600 dark:text-amber-400 text-xs">
+                              {inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)
+                            </span>
                           </div>
-                          <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-amber-500 rounded-full transition-all duration-500 shadow-md shadow-amber-500/50"
+                              className="h-full bg-amber-500 rounded-full transition-all duration-500"
                               style={{ width: `${computers.length ? (inUseCount / computers.length) * 100 : 0}%` }}
                             />
                           </div>
                         </div>
 
                         {/* Bảo trì */}
-                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-rose-500/50 transition">
-                          <div className="flex items-center justify-between text-xs mb-2.5">
-                            <span className="flex items-center gap-2.5 font-bold text-white">
-                              <span className="w-3 h-3 rounded-full bg-rose-400 shadow-sm shadow-rose-400" />
+                        <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.08]">
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-white">
+                              <span className="w-2 h-2 rounded-full bg-rose-500 shadow-sm" />
                               Bảo trì
                             </span>
-                            <span className="font-extrabold text-rose-400 text-sm">{maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)</span>
+                            <span className="font-extrabold text-rose-600 dark:text-rose-400 text-xs">
+                              {maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)
+                            </span>
                           </div>
-                          <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-rose-500 rounded-full transition-all duration-500 shadow-md shadow-rose-500/50"
+                              className="h-full bg-rose-500 rounded-full transition-all duration-500"
                               style={{ width: `${computers.length ? (maintenanceCount / computers.length) * 100 : 0}%` }}
                             />
                           </div>
@@ -908,46 +898,45 @@ export default function Home() {
                     </div>
 
                     {/* Room Breakdown Footer */}
-                    <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 gap-3.5">
-                      <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center">
-                        <div className="text-[11px] text-slate-400">Phòng C201</div>
-                        <div className="text-sm font-bold text-white mt-0.5">4 máy (100% OK)</div>
+                    <div className="mt-5 pt-4 border-t border-slate-150 dark:border-white/10 grid grid-cols-2 gap-3">
+                      <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.06] text-center">
+                        <div className="text-[10px] text-slate-400">Phòng C201</div>
+                        <div className="text-xs font-bold text-slate-800 dark:text-white mt-0.5">4 máy (100% OK)</div>
                       </div>
-                      <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center">
-                        <div className="text-[11px] text-slate-400">Phòng C202</div>
-                        <div className="text-sm font-bold text-white mt-0.5">2 máy (1 Đang dùng)</div>
+                      <div className="p-2.5 rounded-xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-150 dark:border-white/[0.06] text-center">
+                        <div className="text-[10px] text-slate-400">Phòng C202</div>
+                        <div className="text-xs font-bold text-slate-800 dark:text-white mt-0.5">2 máy (1 Đang dùng)</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Right Panel: Thời gian sử dụng theo máy (7 cols) */}
-                  <div className="xl:col-span-7 obsidian-card p-6 lg:p-7 flex flex-col justify-between">
+                  <div className="xl:col-span-7 app-card p-5 flex flex-col justify-between min-h-[350px]">
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <h2 className="text-lg font-extrabold text-white tracking-tight">
+                          <h2 className="text-base font-extrabold text-slate-800 dark:text-white tracking-tight">
                             Thời gian sử dụng theo máy
                           </h2>
-                          <p className="text-xs text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="hidden sm:inline text-xs text-slate-400 font-medium">
-                            Cao điểm: <strong className="text-indigo-400 font-bold">11:00 (95%)</strong>
+                        <div className="flex items-center gap-2">
+                          <span className="hidden sm:inline text-xs text-slate-500 dark:text-slate-400">
+                            Cao điểm: <strong className="text-indigo-600 dark:text-indigo-400 font-bold">11:00 (95%)</strong>
                           </span>
-                          <span className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                          <span className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                             LIVE
                           </span>
                         </div>
                       </div>
 
-                      {/* Rich Interactive Neon Bar Chart with safe headroom */}
-                      <div className="relative h-[290px] w-full flex items-end justify-between gap-3 pt-12 pb-4 px-6 bg-[#080d1a] rounded-2xl border border-white/10 mt-4 shadow-inner">
-                        {/* Grid lines */}
-                        <div className="absolute inset-0 flex flex-col justify-between p-5 pointer-events-none opacity-20">
-                          <div className="border-b border-dashed border-slate-500 w-full" />
-                          <div className="border-b border-dashed border-slate-500 w-full" />
-                          <div className="border-b border-dashed border-slate-500 w-full" />
+                      {/* Bar Chart Container */}
+                      <div className="relative h-[210px] w-full flex items-end justify-between gap-2.5 pt-8 pb-3 px-4 bg-slate-50/80 dark:bg-[#080d1a] rounded-xl border border-slate-150 dark:border-white/10 mt-3">
+                        <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
+                          <div className="border-b border-dashed border-slate-400 w-full" />
+                          <div className="border-b border-dashed border-slate-400 w-full" />
+                          <div className="border-b border-dashed border-slate-400 w-full" />
                         </div>
 
                         {[
@@ -960,22 +949,19 @@ export default function Home() {
                           { time: "19:00", val: 40, label: "M01" },
                           { time: "21:00", val: 20, label: "M04" }
                         ].map((item, idx) => (
-                          <div key={idx} className="flex-1 flex flex-col items-center gap-2 group relative z-10">
-                            {/* Tooltip on Hover */}
-                            <div className="absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/60 text-[11px] text-white px-2.5 py-1 rounded-lg shadow-2xl whitespace-nowrap pointer-events-none z-20">
+                          <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group relative z-10">
+                            <div className="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded shadow whitespace-nowrap pointer-events-none z-20">
                               {item.label}: {item.val}% tải
                             </div>
 
-                            {/* Bar Column (max-h 170px to guarantee ample clearance below chart title) */}
-                            <div className="w-full max-w-[44px] h-[170px] bg-slate-800/60 rounded-xl flex items-end overflow-hidden p-0.5">
+                            <div className="w-full max-w-[36px] h-[130px] bg-slate-200/80 dark:bg-slate-800/60 rounded-lg flex items-end overflow-hidden">
                               <div
-                                className="w-full rounded-lg bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-lg shadow-indigo-500/30"
+                                className="w-full rounded-lg bg-gradient-to-t from-indigo-600 to-indigo-400 group-hover:brightness-110 transition-all duration-300"
                                 style={{ height: `${item.val}%` }}
                               />
                             </div>
 
-                            {/* Time label */}
-                            <span className="text-xs text-slate-400 group-hover:text-indigo-300 font-mono font-bold">
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">
                               {item.time}
                             </span>
                           </div>
@@ -983,16 +969,16 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="mt-5 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
-                      <span className="flex items-center gap-2 font-medium">
-                        <Activity className="w-4 h-4 text-indigo-400" />
+                    <div className="mt-4 flex items-center justify-between text-[11px] text-slate-400 pt-2.5 border-t border-slate-150 dark:border-white/10">
+                      <span className="flex items-center gap-1.5 font-medium">
+                        <Activity className="w-3.5 h-3.5 text-indigo-500" />
                         Cập nhật tự động mỗi 5 giây
                       </span>
                       <button
                         onClick={() => showToast("Đã làm mới dữ liệu biểu đồ!")}
-                        className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold transition"
+                        className="flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold transition"
                       >
-                        <RotateCcw className="w-3.5 h-3.5" /> Làm mới
+                        <RotateCcw className="w-3 h-3" /> Làm mới
                       </button>
                     </div>
                   </div>
@@ -1000,15 +986,15 @@ export default function Home() {
                 </div>
 
                 {/* 3. RECENT ACTIVITY ON DASHBOARD */}
-                <div className="obsidian-card p-6 lg:p-7 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div className="app-card p-5 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-150 dark:border-white/10">
                     <div>
-                      <h2 className="text-lg font-bold text-white">Yêu cầu mượn máy gần đây</h2>
-                      <p className="text-xs text-slate-400">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
+                      <h2 className="text-base font-extrabold text-slate-800 dark:text-white">Yêu cầu mượn máy gần đây</h2>
+                      <p className="text-[11px] text-slate-400">Danh sách các yêu cầu thực hành mới nhất cần duyệt</p>
                     </div>
                     <button
                       onClick={() => setCurrentView("computers")}
-                      className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1"
                     >
                       Xem tất cả trong Quản lý máy tính <ChevronRight className="w-3.5 h-3.5" />
                     </button>
@@ -1017,34 +1003,34 @@ export default function Home() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs border-collapse">
                       <thead>
-                        <tr className="border-b border-white/10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                          <th className="py-3.5 px-5">Mã máy</th>
-                          <th className="py-3.5 px-5">Người yêu cầu</th>
-                          <th className="py-3.5 px-5">Lý do mượn</th>
-                          <th className="py-3.5 px-5">Thời lượng</th>
-                          <th className="py-3.5 px-5">Trạng thái</th>
-                          <th className="py-3.5 px-5 text-right">Hành động</th>
+                        <tr className="border-b border-slate-150 dark:border-white/10 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
+                          <th className="py-2.5 px-3">Mã máy</th>
+                          <th className="py-2.5 px-3">Người yêu cầu</th>
+                          <th className="py-2.5 px-3">Lý do mượn</th>
+                          <th className="py-2.5 px-3">Thời lượng</th>
+                          <th className="py-2.5 px-3">Trạng thái</th>
+                          <th className="py-2.5 px-3 text-right">Hành động</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/[0.06]">
+                      <tbody className="divide-y divide-slate-150 dark:divide-white/[0.06]">
                         {requests.slice(0, 3).map((req) => (
-                          <tr key={req.id} className="hover:bg-white/[0.03] transition">
-                            <td className="py-4 px-5 font-bold text-white font-mono text-sm">
+                          <tr key={req.id} className="hover:bg-slate-50/80 dark:hover:bg-white/[0.03] transition">
+                            <td className="py-3 px-3 font-bold text-slate-800 dark:text-white font-mono text-xs">
                               {req.computerName}
                             </td>
-                            <td className="py-4 px-5 text-slate-200">
-                              <span className="font-semibold text-white">{req.requester}</span>
+                            <td className="py-3 px-3 text-slate-700 dark:text-slate-200">
+                              <span className="font-semibold text-slate-800 dark:text-white">{req.requester}</span>
                               {req.requesterId && (
-                                <span className="text-[11px] text-slate-400 ml-2 font-mono">({req.requesterId})</span>
+                                <span className="text-[10px] text-slate-400 ml-1.5 font-mono">({req.requesterId})</span>
                               )}
                             </td>
-                            <td className="py-4 px-5 text-slate-300 max-w-xs truncate font-medium">
+                            <td className="py-3 px-3 text-slate-500 dark:text-slate-300 max-w-xs truncate font-medium">
                               {req.reason || "Không có lý do"}
                             </td>
-                            <td className="py-4 px-5 text-slate-400 font-semibold">
+                            <td className="py-3 px-3 text-slate-500 dark:text-slate-400 font-semibold">
                               {req.duration}
                             </td>
-                            <td className="py-4 px-5">
+                            <td className="py-3 px-3">
                               {req.status === "approved" && (
                                 <span className="badge-available">Đã duyệt</span>
                               )}
@@ -1055,24 +1041,24 @@ export default function Home() {
                                 <span className="badge-maintenance">Từ chối</span>
                               )}
                             </td>
-                            <td className="py-4 px-5 text-right">
+                            <td className="py-3 px-3 text-right">
                               {req.status === "pending" ? (
-                                <div className="flex items-center justify-end gap-2">
+                                <div className="flex items-center justify-end gap-1.5">
                                   <button
                                     onClick={() => handleUpdateRequestStatus(req.id, "approved")}
-                                    className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold transition shadow-sm shadow-emerald-500/20"
+                                    className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/30 border border-emerald-200 dark:border-emerald-500/40 text-xs font-bold transition shadow-xs"
                                   >
                                     Duyệt
                                   </button>
                                   <button
                                     onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
-                                    className="px-3.5 py-1.5 rounded-xl bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold transition shadow-sm shadow-rose-500/20"
+                                    className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/30 border border-rose-200 dark:border-rose-500/40 text-xs font-bold transition shadow-xs"
                                   >
                                     Từ chối
                                   </button>
                                 </div>
                               ) : (
-                                <span className="text-xs text-slate-500 font-medium">Hoàn tất</span>
+                                <span className="text-xs text-slate-400 font-medium">Hoàn tất</span>
                               )}
                             </td>
                           </tr>
