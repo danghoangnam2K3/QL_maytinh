@@ -113,13 +113,28 @@ export default function Home() {
     }, 3500);
   };
 
-  // Sync with Supabase via API Routes
+  // Fetch Profile once on mount or upon save
+  const fetchProfile = async () => {
+    try {
+      const resProfile = await fetch("/api/profile");
+      if (resProfile.ok) {
+        const dataProfile = await resProfile.json();
+        if (dataProfile.data) {
+          setUser(dataProfile.data);
+          setProfileForm(dataProfile.data);
+        }
+      }
+    } catch (e) {
+      console.warn("Lỗi tải hồ sơ Supabase:", e);
+    }
+  };
+
+  // Sync shared resources with Supabase via API Routes (interval polling)
   const fetchBackendData = async () => {
     try {
-      const [resComps, resReqs, resProfile, resStats, resUsage] = await Promise.all([
+      const [resComps, resReqs, resStats, resUsage] = await Promise.all([
         fetch("/api/computers"),
         fetch("/api/requests"),
-        fetch("/api/profile"),
         fetch("/api/stats"),
         fetch("/api/usage-logs")
       ]);
@@ -131,13 +146,6 @@ export default function Home() {
       if (resReqs.ok) {
         const dataReqs = await resReqs.json();
         if (dataReqs.data) setRequests(dataReqs.data);
-      }
-      if (resProfile.ok) {
-        const dataProfile = await resProfile.json();
-        if (dataProfile.data) {
-          setUser(dataProfile.data);
-          setProfileForm(prev => isProfileEditing ? prev : dataProfile.data);
-        }
       }
       if (resStats.ok) {
         const dataStats = await resStats.json();
@@ -155,6 +163,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    fetchProfile();
     fetchBackendData();
     const interval = setInterval(fetchBackendData, 6000);
     return () => clearInterval(interval);
@@ -308,6 +317,7 @@ export default function Home() {
         setUser(profileForm);
         setIsProfileEditing(false);
         showToast("Đã lưu thay đổi hồ sơ cá nhân vào Supabase thành công!");
+        await fetchProfile();
       } else {
         showToast("Lỗi khi cập nhật hồ sơ", "error");
       }
