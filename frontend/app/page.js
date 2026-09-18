@@ -28,10 +28,12 @@ import {
   ExternalLink,
   ChevronRight,
   TrendingUp,
-  Activity
+  Activity,
+  Cpu,
+  HardDrive
 } from "lucide-react";
 
-// Default Initial Mock Data
+// Default Mock Data
 const INITIAL_USER = {
   fullName: "Hồ Ngọc Hoàng Long",
   studentId: "NV0001171",
@@ -204,7 +206,7 @@ export default function Home() {
     }, 3500);
   };
 
-  // Sync with Backend Node.js API
+  // Sync with API
   const fetchBackendData = async () => {
     try {
       const resComps = await fetch("/api/computers");
@@ -222,9 +224,7 @@ export default function Home() {
         const dataProfile = await resProfile.json();
         if (dataProfile.data) setUser(dataProfile.data);
       }
-    } catch (e) {
-      // Backend not yet reached; client state persists seamlessly
-    }
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -409,62 +409,62 @@ export default function Home() {
   // -------------------------------------------------------------
   if (currentView === "login" || !isLoggedIn) {
     return (
-      <main className="min-h-screen flex items-center justify-center p-4 bg-[#080c14] relative overflow-hidden">
+      <main className="min-h-screen flex items-center justify-center p-4 bg-[#080b13] relative overflow-hidden">
         {/* Ambient Radial Lights */}
-        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-indigo-600/18 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[550px] h-[550px] bg-cyan-600/12 rounded-full blur-[150px] pointer-events-none" />
 
         {/* Main Split Login Card */}
-        <div className="w-full max-w-4xl rounded-3xl overflow-hidden obsidian-card grid grid-cols-1 md:grid-cols-12 min-h-[520px] shadow-2xl relative z-10 border border-white/10">
+        <div className="w-full max-w-4xl rounded-3xl overflow-hidden obsidian-card grid grid-cols-1 md:grid-cols-12 min-h-[530px] shadow-2xl relative z-10 border border-white/15">
           
           {/* Left Column: Dark Gradient Hero Banner */}
-          <div className="md:col-span-5 relative p-8 md:p-10 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#131d36] to-[#0c1220] border-b md:border-b-0 md:border-r border-white/10">
+          <div className="md:col-span-5 relative p-8 md:p-10 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#141d38] to-[#0c1222] border-b md:border-b-0 md:border-r border-white/15">
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-white text-xs font-semibold tracking-wider">
-                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-ping" />
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold tracking-wider shadow-lg">
+                <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-ping" />
                 QLPL DEMO
               </div>
             </div>
 
             <div className="relative z-10 my-8">
-              <p className="text-indigo-200/80 text-sm font-medium">
+              <p className="text-indigo-200 text-sm font-semibold tracking-wide">
                 Nice to see you again
               </p>
-              <h1 className="text-3xl font-extrabold text-white mt-1 tracking-tight">
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-white mt-1.5 tracking-tight">
                 WELCOME BACK
               </h1>
-              <div className="w-14 h-1 bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full mt-2.5 mb-4" />
-              <p className="text-slate-300/80 text-xs leading-relaxed">
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full mt-3 mb-4 shadow-md shadow-indigo-500/50" />
+              <p className="text-slate-300 text-xs leading-relaxed">
                 Hệ thống quản lý phòng thực hành & mượn máy tính thông minh. Giám sát thiết bị và phân bổ tài nguyên thời gian thực.
               </p>
             </div>
 
-            <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-indigo-200/70">
-              <span>Phiên bản 2.5 (Black UI)</span>
-              <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" /> Server Online
+            <div className="relative z-10 pt-4 border-t border-white/15 flex items-center justify-between text-xs text-indigo-200/80 font-medium">
+              <span>Phiên bản 2.5 (Black Edition)</span>
+              <span className="flex items-center gap-2 text-emerald-400 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> Server Online
               </span>
             </div>
           </div>
 
           {/* Right Column: Sleek Dark Login Form */}
-          <div className="md:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-[#0d1322]/90 backdrop-blur-xl">
+          <div className="md:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-[#0d1424]/95 backdrop-blur-xl">
             <div className="max-w-md w-full mx-auto">
-              <div className="mb-6">
-                <span className="text-[11px] font-bold tracking-widest text-indigo-400 uppercase">
+              <div className="mb-7">
+                <span className="text-xs font-extrabold tracking-widest text-indigo-400 uppercase">
                   ACCOUNT
                 </span>
-                <h2 className="text-2xl font-bold text-white mt-0.5">
+                <h2 className="text-2xl lg:text-3xl font-extrabold text-white mt-1">
                   Đăng nhập
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Nhập thông tin bên dưới để tiếp tục.
+                <p className="text-xs text-slate-400 mt-1.5">
+                  Nhập thông tin tài khoản bên dưới để tiếp tục.
                 </p>
               </div>
 
               <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Tên đăng nhập
                   </label>
                   <input
@@ -472,13 +472,13 @@ export default function Home() {
                     required
                     value={loginForm.username}
                     onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
-                    placeholder="Tên đăng nhập"
+                    placeholder="Tên đăng nhập hoặc MSSV"
                     className="glass-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Mật khẩu
                   </label>
                   <div className="relative">
@@ -487,13 +487,13 @@ export default function Home() {
                       required
                       value={loginForm.password}
                       onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                      placeholder="Mật khẩu"
-                      className="glass-input pr-10"
+                      placeholder="Nhập mật khẩu"
+                      className="glass-input pr-11"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -501,23 +501,23 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-center justify-between text-xs pt-1">
-                  <label className="flex items-center gap-2 text-slate-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-slate-300 cursor-pointer font-medium">
                     <input
                       type="checkbox"
                       checked={loginForm.remember}
                       onChange={(e) => setLoginForm({ ...loginForm, remember: e.target.checked })}
-                      className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0 w-3.5 h-3.5"
+                      className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0 w-4 h-4"
                     />
                     <span>Ghi nhớ đăng nhập</span>
                   </label>
-                  <span className="text-indigo-400 hover:text-indigo-300 transition font-medium cursor-pointer">
+                  <span className="text-indigo-400 hover:text-indigo-300 transition font-semibold cursor-pointer">
                     Chưa có tài khoản?
                   </span>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full btn-primary-glow py-3 rounded-xl text-sm font-semibold tracking-wide uppercase mt-2"
+                  className="w-full btn-primary-glow py-3.5 rounded-xl text-sm font-bold tracking-wide uppercase mt-2"
                 >
                   ĐĂNG NHẬP
                 </button>
@@ -529,9 +529,9 @@ export default function Home() {
                       setLoginForm({ username: "admin", password: "password123", remember: true });
                       handleLoginSubmit();
                     }}
-                    className="w-full py-2.5 px-3 rounded-xl border border-indigo-500/30 bg-indigo-950/20 hover:bg-indigo-900/30 text-indigo-300 text-xs font-medium transition flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 rounded-xl border border-indigo-500/40 bg-indigo-950/30 hover:bg-indigo-900/40 text-indigo-300 text-xs font-semibold transition flex items-center justify-center gap-2.5 shadow-sm"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                    <Sparkles className="w-4 h-4 text-indigo-400" />
                     Đăng nhập nhanh với quyền Quản Trị Viên (Demo)
                   </button>
                 </div>
@@ -544,46 +544,46 @@ export default function Home() {
   }
 
   // -------------------------------------------------------------
-  // MAIN APPLICATION LAYOUT (Screenshot 2, 3, 4 with Perfectly Spaced Layout)
+  // MAIN APPLICATION LAYOUT (Screenshot 2, 3, 4 with Refined Proportions)
   // -------------------------------------------------------------
   return (
-    <div className="min-h-screen bg-[#080c14] text-slate-100 flex flex-col p-4 md:p-6">
+    <div className="min-h-screen bg-[#080b13] text-slate-100 flex flex-col p-4 md:p-6 lg:p-8">
       
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl border border-indigo-500/40 bg-[#121929]/95 backdrop-blur-2xl shadow-2xl shadow-indigo-500/30 text-white animate-bounce-short">
-          <Sparkles className="w-5 h-5 text-indigo-400" />
-          <span className="text-sm font-medium">{toast.message}</span>
+        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-2xl border border-indigo-500/50 bg-[#12192c]/95 backdrop-blur-2xl shadow-2xl shadow-indigo-500/40 text-white animate-bounce-short">
+          <Sparkles className="w-5 h-5 text-indigo-400 shrink-0" />
+          <span className="text-sm font-semibold">{toast.message}</span>
         </div>
       )}
 
-      {/* 1. FLOATING TOP HEADER (Matching Screenshot 2 exactly as a floating rounded card) */}
-      <header className="w-full obsidian-card px-5 py-3.5 mb-6 flex items-center justify-between shadow-xl border border-white/10">
+      {/* 1. TOP NAVBAR (Floating Card with Rich Spacing) */}
+      <header className="w-full obsidian-card px-6 py-4 mb-6 flex items-center justify-between shadow-2xl border border-white/15">
         
         {/* Left: Mobile Toggle & Brand Logo */}
         <div className="flex items-center gap-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white"
+            className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/15 text-slate-300 hover:text-white"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           <div
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-3.5 cursor-pointer group"
             onClick={() => setCurrentView("dashboard")}
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition">
-              <div className="w-full h-full bg-[#0d1322] rounded-[14px] flex items-center justify-center font-extrabold text-base text-white">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[2px] shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition">
+              <div className="w-full h-full bg-[#0d1324] rounded-[14px] flex items-center justify-center font-extrabold text-lg text-white">
                 Q
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-widest uppercase text-slate-400 font-semibold leading-tight">
+              <div className="text-[11px] tracking-widest uppercase text-indigo-400 font-extrabold leading-tight">
                 WORKSPACE
               </div>
-              <div className="text-sm font-bold text-white tracking-wide">
-                QLPL Demo <span className="text-[11px] text-indigo-400 font-normal ml-1">Black Edition</span>
+              <div className="text-base font-extrabold text-white tracking-wide">
+                QLPL Demo <span className="text-xs text-slate-400 font-medium ml-1">Black Edition</span>
               </div>
             </div>
           </div>
@@ -592,24 +592,29 @@ export default function Home() {
         {/* Right: Status badge & User Profile pill */}
         <div className="flex items-center gap-3 md:gap-4">
           {/* Status Badge */}
-          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-xs font-medium text-emerald-400 shadow-sm shadow-emerald-500/10">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-950/50 border border-emerald-500/40 text-xs font-bold text-emerald-400 shadow-md shadow-emerald-500/15">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>System online</span>
           </div>
 
           {/* User Profile pill */}
           <div
             onClick={() => setCurrentView("profile")}
-            className="flex items-center gap-2.5 p-1.5 pr-3.5 rounded-full bg-white/[0.05] border border-white/[0.1] hover:border-indigo-500/50 hover:bg-white/[0.08] transition cursor-pointer"
+            className="flex items-center gap-3 p-1.5 pr-4 rounded-full bg-white/[0.06] border border-white/[0.15] hover:border-indigo-500/60 hover:bg-white/[0.1] transition cursor-pointer shadow-md"
           >
             <img
               src={user.avatar}
               alt="Avatar"
-              className="w-8 h-8 rounded-full object-cover border border-white/20"
+              className="w-9 h-9 rounded-full object-cover border-2 border-indigo-500/50"
             />
-            <span className="hidden md:inline text-xs font-semibold text-slate-200">
-              {user.fullName}
-            </span>
+            <div className="hidden md:flex flex-col text-left">
+              <span className="text-xs font-bold text-white leading-tight">
+                {user.fullName}
+              </span>
+              <span className="text-[10px] text-indigo-300 font-medium">
+                {user.role}
+              </span>
+            </div>
           </div>
 
           {/* Logout */}
@@ -620,102 +625,107 @@ export default function Home() {
               showToast("Đã đăng xuất tài khoản", "info");
             }}
             title="Đăng xuất"
-            className="p-2.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-slate-400 hover:text-rose-400 hover:border-rose-500/30 transition"
+            className="p-2.5 rounded-xl bg-white/[0.06] border border-white/[0.15] text-slate-400 hover:text-rose-400 hover:border-rose-500/40 transition shadow-sm"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
       </header>
 
-      {/* 2. BODY CONTENT: SIDEBAR + MAIN CANVAS (Full Width, Balanced Proportions) */}
-      <div className="flex-1 flex flex-col md:flex-row gap-6 items-stretch min-h-0">
+      {/* 2. BODY CONTENT: SIDEBAR + MAIN CANVAS */}
+      <div className="flex-1 flex flex-col md:flex-row gap-6 items-start">
         
-        {/* LEFT SIDEBAR (Full height floating rounded obsidian card) */}
+        {/* LEFT SIDEBAR (Sticky, Natural Height, No Infinite Void) */}
         <aside
-          className={`fixed md:static inset-y-4 left-4 z-30 w-64 lg:w-72 obsidian-card p-5 flex flex-col justify-between transition-transform duration-300 md:translate-x-0 ${
+          className={`fixed md:sticky top-6 z-30 w-full md:w-64 lg:w-72 obsidian-card p-5 flex flex-col justify-between shrink-0 transition-transform duration-300 md:translate-x-0 ${
             sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-[110%] md:translate-x-0"
           }`}
         >
           <div className="space-y-4">
-            <div className="text-[11px] font-bold tracking-wider text-slate-400 uppercase px-3">
+            <div className="text-xs font-extrabold tracking-wider text-slate-400 uppercase px-3">
               NAVIGATION
             </div>
             
             <nav className="space-y-2">
               <button
                 onClick={() => { setCurrentView("dashboard"); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold transition ${
+                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
                   currentView === "dashboard"
-                    ? "bg-gradient-to-r from-indigo-600/30 to-indigo-500/10 border border-indigo-500/40 text-indigo-300 shadow-lg shadow-indigo-500/10"
-                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+                    ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
-                <LayoutDashboard className="w-4 h-4 text-indigo-400 shrink-0" />
+                <LayoutDashboard className="w-5 h-5 text-indigo-400 shrink-0" />
                 <span>Trang chủ</span>
               </button>
 
               <button
                 onClick={() => { setCurrentView("computers"); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold transition ${
+                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
                   currentView === "computers"
-                    ? "bg-gradient-to-r from-indigo-600/30 to-indigo-500/10 border border-indigo-500/40 text-indigo-300 shadow-lg shadow-indigo-500/10"
-                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+                    ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
-                <Monitor className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Monitor className="w-5 h-5 text-cyan-400 shrink-0" />
                 <span>Quản lý máy tính</span>
-                <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300 font-mono">
+                <span className="ml-auto text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono font-bold">
                   {computers.length}
                 </span>
               </button>
 
               <button
                 onClick={() => { setCurrentView("swagger"); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold transition ${
+                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
                   currentView === "swagger"
-                    ? "bg-gradient-to-r from-indigo-600/30 to-indigo-500/10 border border-indigo-500/40 text-indigo-300 shadow-lg shadow-indigo-500/10"
-                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+                    ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
-                <FileCode2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <FileCode2 className="w-5 h-5 text-emerald-400 shrink-0" />
                 <span>Swagger API</span>
-                <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono font-bold">
+                <span className="ml-auto text-[11px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 font-mono font-bold">
                   REST
                 </span>
               </button>
 
               <button
                 onClick={() => { setCurrentView("profile"); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold transition ${
+                className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-semibold transition ${
                   currentView === "profile"
-                    ? "bg-gradient-to-r from-indigo-600/30 to-indigo-500/10 border border-indigo-500/40 text-indigo-300 shadow-lg shadow-indigo-500/10"
-                    : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+                    ? "bg-gradient-to-r from-indigo-600/35 to-indigo-500/15 border border-indigo-500/50 text-white font-bold shadow-lg shadow-indigo-500/20"
+                    : "text-slate-300 hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
-                <User className="w-4 h-4 text-amber-400 shrink-0" />
+                <User className="w-5 h-5 text-amber-400 shrink-0" />
                 <span>Hồ sơ</span>
               </button>
             </nav>
           </div>
 
           {/* Bottom Role Card (Matching Screenshot "Vai trò: Quản trị viên") */}
-          <div className="pt-6 border-t border-white/[0.08] space-y-3">
-            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-2.5 text-xs text-amber-300 font-medium">
-              <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-              <div className="truncate">Vai trò: {user.role}</div>
+          <div className="pt-6 mt-6 border-t border-white/10 space-y-3">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 to-amber-600/5 border border-amber-500/40 flex items-center gap-3 shadow-md shadow-amber-500/10">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5 text-amber-400" />
+              </div>
+              <div className="truncate">
+                <div className="text-xs font-bold text-amber-300">Vai trò: {user.role}</div>
+                <div className="text-[11px] text-amber-400/80">Toàn quyền hệ thống</div>
+              </div>
             </div>
 
             <button
               onClick={() => setCurrentView("login")}
-              className="w-full text-center py-2 text-xs text-slate-400 hover:text-indigo-300 transition"
+              className="w-full text-center py-2 text-xs font-medium text-slate-400 hover:text-indigo-300 transition"
             >
               Xem trang Đăng nhập (Auth)
             </button>
           </div>
         </aside>
 
-        {/* MAIN DISPLAY CANVAS (Full Width, Filling the Screen Gracefully) */}
-        <main className="flex-1 min-w-0 flex flex-col">
+        {/* MAIN DISPLAY CANVAS */}
+        <main className="flex-1 min-w-0 w-full flex flex-col space-y-6">
           
           {/* ============================================================== */}
           {/* VIEW: DASHBOARD (Screenshot 2) */}
@@ -724,136 +734,141 @@ export default function Home() {
             <div className="space-y-6">
               
               {/* Header Title Section */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                     Dashboard
                   </h1>
-                  <p className="text-xs lg:text-sm text-slate-400 mt-1">
+                  <p className="text-sm text-slate-400 mt-1">
                     Tổng quan hệ thống phòng máy và người dùng
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400">Trạng thái:</span>
-                  <span className="badge-available">Hoạt động bình thường</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs text-slate-400 font-semibold">Trạng thái:</span>
+                  <span className="badge-available">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" /> Hoạt động bình thường
+                  </span>
                 </div>
               </div>
 
-              {/* 4 TOP KPI CARDS (Spacious, Clear Contrast, Elegant Icons) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {/* 4 TOP KPI CARDS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                 
                 {/* 1. Người dùng */}
-                <div className="obsidian-card-hover p-6 flex items-center justify-between gap-4 border border-white/10">
+                <div className="obsidian-card-hover p-6 lg:p-7 flex items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-semibold text-slate-400 tracking-wider">Người dùng</span>
-                    <div className="text-3xl font-extrabold text-white mt-2 tracking-tight">42</div>
-                    <p className="text-[11px] text-slate-400 mt-1">Tổng số tài khoản đăng ký</p>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Người dùng</span>
+                    <div className="text-3xl lg:text-4xl font-extrabold text-white mt-2.5 tracking-tight">42</div>
+                    <p className="text-xs text-slate-400 mt-2">Tổng số tài khoản đăng ký</p>
                   </div>
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-indigo-600/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0 shadow-lg shadow-indigo-500/10">
-                    <Users className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/15 border border-indigo-500/40 flex items-center justify-center text-indigo-400 shrink-0 shadow-xl shadow-indigo-500/25">
+                    <Users className="w-7 h-7" />
                   </div>
                 </div>
 
                 {/* 2. Máy tính */}
-                <div className="obsidian-card-hover p-6 flex items-center justify-between gap-4 border border-white/10">
+                <div className="obsidian-card-hover p-6 lg:p-7 flex items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-semibold text-slate-400 tracking-wider">Máy tính</span>
-                    <div className="text-3xl font-extrabold text-white mt-2 tracking-tight">{computers.length}</div>
-                    <p className="text-[11px] text-slate-400 mt-1">Tổng số máy hiện có</p>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Máy tính</span>
+                    <div className="text-3xl lg:text-4xl font-extrabold text-white mt-2.5 tracking-tight">{computers.length}</div>
+                    <p className="text-xs text-slate-400 mt-2">Tổng số máy hiện có</p>
                   </div>
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 shadow-lg shadow-purple-500/10">
-                    <Monitor className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-purple-500/15 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0 shadow-xl shadow-purple-500/25">
+                    <Monitor className="w-7 h-7" />
                   </div>
                 </div>
 
                 {/* 3. Máy đang dùng */}
-                <div className="obsidian-card-hover p-6 flex items-center justify-between gap-4 border border-white/10">
+                <div className="obsidian-card-hover p-6 lg:p-7 flex items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-semibold text-slate-400 tracking-wider">Máy đang dùng</span>
-                    <div className="text-3xl font-extrabold text-white mt-2 tracking-tight">{inUseCount}</div>
-                    <p className="text-[11px] text-slate-400 mt-1">Máy đang được sử dụng</p>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Máy đang dùng</span>
+                    <div className="text-3xl lg:text-4xl font-extrabold text-white mt-2.5 tracking-tight">{inUseCount}</div>
+                    <p className="text-xs text-slate-400 mt-2">Máy đang được sử dụng</p>
                   </div>
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 shadow-lg shadow-amber-500/10">
-                    <Laptop className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 shadow-xl shadow-amber-500/25">
+                    <Laptop className="w-7 h-7" />
                   </div>
                 </div>
 
                 {/* 4. Tổng thời gian */}
-                <div className="obsidian-card-hover p-6 flex items-center justify-between gap-4 border border-white/10">
+                <div className="obsidian-card-hover p-6 lg:p-7 flex items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-semibold text-slate-400 tracking-wider">Tổng thời gian</span>
-                    <div className="text-3xl font-extrabold text-white mt-2 tracking-tight">128.5h</div>
-                    <p className="text-[11px] text-slate-400 mt-1">Tổng thời gian đã sử dụng</p>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Tổng thời gian</span>
+                    <div className="text-3xl lg:text-4xl font-extrabold text-white mt-2.5 tracking-tight">128.5h</div>
+                    <p className="text-xs text-slate-400 mt-2">Tổng thời gian đã sử dụng</p>
                   </div>
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 shadow-lg shadow-emerald-500/10">
-                    <Clock className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-xl shadow-emerald-500/25">
+                    <Clock className="w-7 h-7" />
                   </div>
                 </div>
 
               </div>
 
               {/* 2 MAIN LOWER PANELS: MÁY THEO TRẠNG THÁI & BIỂU ĐỒ THỜI GIAN THỰC */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-stretch">
                 
                 {/* Left Panel: Máy theo trạng thái (5 cols) */}
-                <div className="lg:col-span-5 obsidian-card p-6 flex flex-col justify-between border border-white/10">
+                <div className="xl:col-span-5 obsidian-card p-6 lg:p-7 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-base font-bold text-white tracking-tight">
-                        Máy theo trạng thái
-                      </h2>
-                      <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-white/10 text-slate-300 border border-white/10">
+                      <div>
+                        <h2 className="text-lg font-extrabold text-white tracking-tight">
+                          Máy theo trạng thái
+                        </h2>
+                        <p className="text-xs text-slate-400 mt-1">Phân bổ thiết bị trong phòng lab</p>
+                      </div>
+                      <span className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-full bg-white/10 text-white border border-white/15">
                         {computers.length} TOTAL
                       </span>
                     </div>
 
                     <div className="space-y-4">
                       {/* Có sẵn */}
-                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-emerald-500/40 transition">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-emerald-500/50 transition">
                         <div className="flex items-center justify-between text-xs mb-2.5">
-                          <span className="flex items-center gap-2 font-semibold text-slate-200">
-                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                          <span className="flex items-center gap-2.5 font-bold text-white">
+                            <span className="w-3 h-3 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400" />
                             Có sẵn
                           </span>
-                          <span className="font-bold text-emerald-400">{availableCount} máy</span>
+                          <span className="font-extrabold text-emerald-400 text-sm">{availableCount} máy ({computers.length ? Math.round((availableCount / computers.length) * 100) : 0}%)</span>
                         </div>
-                        <div className="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
+                        <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-emerald-500 rounded-full transition-all duration-500 shadow-sm shadow-emerald-500"
+                            className="h-full bg-emerald-500 rounded-full transition-all duration-500 shadow-md shadow-emerald-500/50"
                             style={{ width: `${computers.length ? (availableCount / computers.length) * 100 : 0}%` }}
                           />
                         </div>
                       </div>
 
                       {/* Đang sử dụng */}
-                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-amber-500/40 transition">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-500/50 transition">
                         <div className="flex items-center justify-between text-xs mb-2.5">
-                          <span className="flex items-center gap-2 font-semibold text-slate-200">
-                            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                          <span className="flex items-center gap-2.5 font-bold text-white">
+                            <span className="w-3 h-3 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
                             Đang sử dụng
                           </span>
-                          <span className="font-bold text-amber-400">{inUseCount} máy</span>
+                          <span className="font-extrabold text-amber-400 text-sm">{inUseCount} máy ({computers.length ? Math.round((inUseCount / computers.length) * 100) : 0}%)</span>
                         </div>
-                        <div className="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
+                        <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-amber-500 rounded-full transition-all duration-500 shadow-sm shadow-amber-500"
+                            className="h-full bg-amber-500 rounded-full transition-all duration-500 shadow-md shadow-amber-500/50"
                             style={{ width: `${computers.length ? (inUseCount / computers.length) * 100 : 0}%` }}
                           />
                         </div>
                       </div>
 
                       {/* Bảo trì */}
-                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-rose-500/40 transition">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-rose-500/50 transition">
                         <div className="flex items-center justify-between text-xs mb-2.5">
-                          <span className="flex items-center gap-2 font-semibold text-slate-200">
-                            <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                          <span className="flex items-center gap-2.5 font-bold text-white">
+                            <span className="w-3 h-3 rounded-full bg-rose-400 shadow-sm shadow-rose-400" />
                             Bảo trì
                           </span>
-                          <span className="font-bold text-rose-400">{maintenanceCount} máy</span>
+                          <span className="font-extrabold text-rose-400 text-sm">{maintenanceCount} máy ({computers.length ? Math.round((maintenanceCount / computers.length) * 100) : 0}%)</span>
                         </div>
-                        <div className="w-full h-2.5 bg-slate-800/80 rounded-full overflow-hidden">
+                        <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-rose-500 rounded-full transition-all duration-500 shadow-sm shadow-rose-500"
+                            className="h-full bg-rose-500 rounded-full transition-all duration-500 shadow-md shadow-rose-500/50"
                             style={{ width: `${computers.length ? (maintenanceCount / computers.length) * 100 : 0}%` }}
                           />
                         </div>
@@ -861,63 +876,73 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400 font-medium">
-                    <span>Phòng C201: 4 máy</span>
-                    <span>Phòng C202: 2 máy</span>
+                  {/* Room Breakdown Footer */}
+                  <div className="mt-8 pt-5 border-t border-white/10 grid grid-cols-2 gap-3">
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center">
+                      <div className="text-[11px] text-slate-400">Phòng C201</div>
+                      <div className="text-sm font-bold text-white mt-0.5">4 máy (100% OK)</div>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center">
+                      <div className="text-[11px] text-slate-400">Phòng C202</div>
+                      <div className="text-sm font-bold text-white mt-0.5">2 máy (1 Đang dùng)</div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Right Panel: Thời gian sử dụng theo máy (7 cols) */}
-                <div className="lg:col-span-7 obsidian-card p-6 flex flex-col justify-between border border-white/10">
+                <div className="xl:col-span-7 obsidian-card p-6 lg:p-7 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h2 className="text-base font-bold text-white tracking-tight">
+                        <h2 className="text-lg font-extrabold text-white tracking-tight">
                           Thời gian sử dụng theo máy
                         </h2>
-                        <p className="text-xs text-slate-400 mt-0.5">Biểu đồ giám sát tải phòng máy thời gian thực</p>
+                        <p className="text-xs text-slate-400 mt-1">Biểu đồ giám sát tải phòng máy thời gian thực</p>
                       </div>
-                      <span className="flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                        LIVE
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="hidden sm:inline text-xs text-slate-400 font-medium">Cao điểm: <strong className="text-indigo-400">11:00 (95%)</strong></span>
+                        <span className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                          LIVE
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Rich Interactive Neon Bar & Area Chart */}
-                    <div className="relative h-64 w-full flex items-end justify-between gap-3 pt-8 pb-3 px-4 bg-[#080d18]/80 rounded-2xl border border-white/[0.06] mt-4">
+                    {/* Rich Interactive Neon Bar Chart */}
+                    <div className="relative h-72 w-full flex items-end justify-between gap-3 pt-8 pb-3 px-4 bg-[#080d1a] rounded-2xl border border-white/10 mt-4 shadow-inner">
                       {/* Grid lines */}
-                      <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-25">
-                        <div className="border-b border-dashed border-slate-700 w-full" />
-                        <div className="border-b border-dashed border-slate-700 w-full" />
-                        <div className="border-b border-dashed border-slate-700 w-full" />
+                      <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
+                        <div className="border-b border-dashed border-slate-500 w-full" />
+                        <div className="border-b border-dashed border-slate-500 w-full" />
+                        <div className="border-b border-dashed border-slate-500 w-full" />
                       </div>
 
                       {[
-                        { time: "07:00", val: 30, label: "M01", active: true },
-                        { time: "09:00", val: 85, label: "M02", active: true },
-                        { time: "11:00", val: 95, label: "M03", active: true },
-                        { time: "13:00", val: 50, label: "M04", active: false },
-                        { time: "15:00", val: 90, label: "M05", active: true },
-                        { time: "17:00", val: 75, label: "M06", active: false },
-                        { time: "19:00", val: 40, label: "M01", active: false },
-                        { time: "21:00", val: 20, label: "M04", active: false }
+                        { time: "07:00", val: 30, label: "M01" },
+                        { time: "09:00", val: 85, label: "M02" },
+                        { time: "11:00", val: 95, label: "M03" },
+                        { time: "13:00", val: 50, label: "M04" },
+                        { time: "15:00", val: 90, label: "M05" },
+                        { time: "17:00", val: 75, label: "M06" },
+                        { time: "19:00", val: 40, label: "M01" },
+                        { time: "21:00", val: 20, label: "M04" }
                       ].map((item, idx) => (
                         <div key={idx} className="flex-1 flex flex-col items-center gap-2.5 group relative z-10">
                           {/* Tooltip on Hover */}
-                          <div className="absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/50 text-[11px] text-white px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap pointer-events-none">
+                          <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-indigo-950 border border-indigo-500/60 text-xs text-white px-3 py-1 rounded-lg shadow-2xl whitespace-nowrap pointer-events-none z-20">
                             {item.label}: {item.val}% tải
                           </div>
 
                           {/* Bar */}
-                          <div className="w-full max-w-[34px] h-44 bg-slate-800/60 rounded-t-xl flex items-end overflow-hidden">
+                          <div className="w-full max-w-[42px] h-48 bg-slate-800/80 rounded-t-xl flex items-end overflow-hidden">
                             <div
-                              className="w-full rounded-t-xl bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-md shadow-indigo-500/30"
+                              className="w-full rounded-t-xl bg-gradient-to-t from-indigo-600 via-indigo-500 to-cyan-400 group-hover:brightness-125 transition-all duration-300 shadow-lg shadow-indigo-500/40"
                               style={{ height: `${item.val}%` }}
                             />
                           </div>
 
                           {/* Time label */}
-                          <span className="text-[11px] text-slate-400 group-hover:text-indigo-300 font-mono font-medium">
+                          <span className="text-xs text-slate-400 group-hover:text-indigo-300 font-mono font-bold">
                             {item.time}
                           </span>
                         </div>
@@ -925,16 +950,16 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-white/[0.05]">
-                    <span className="flex items-center gap-1.5">
-                      <Activity className="w-3.5 h-3.5 text-indigo-400" />
+                  <div className="mt-5 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                    <span className="flex items-center gap-2 font-medium">
+                      <Activity className="w-4 h-4 text-indigo-400" />
                       Cập nhật tự động mỗi 5 giây
                     </span>
                     <button
                       onClick={() => showToast("Đã làm mới dữ liệu biểu đồ!")}
-                      className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-medium transition"
+                      className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold transition"
                     >
-                      <RotateCcw className="w-3 h-3" /> Làm mới
+                      <RotateCcw className="w-3.5 h-3.5" /> Làm mới
                     </button>
                   </div>
                 </div>
@@ -952,46 +977,46 @@ export default function Home() {
               {/* Header with Title and Add Button */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
+                  <span className="text-xs font-extrabold tracking-widest text-indigo-400 uppercase">
                     OPERATIONS
                   </span>
-                  <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                     Quản lý máy tính
                   </h1>
-                  <p className="text-xs lg:text-sm text-slate-400 mt-1">
+                  <p className="text-sm text-slate-400 mt-1">
                     Theo dõi phòng máy, trạng thái hoạt động và xử lý yêu cầu mượn trong thời gian thực.
                   </p>
                 </div>
 
                 <button
                   onClick={() => setIsAddModalOpen(true)}
-                  className="btn-primary-glow px-5 py-3 text-xs self-start sm:self-auto"
+                  className="btn-primary-glow px-6 py-3.5 text-xs self-start sm:self-auto"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Thêm máy</span>
+                  <span>Thêm máy mới</span>
                 </button>
               </div>
 
-              {/* TOP 4 SUMMARY METRIC STRIP (Screenshot 3 top bar) */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="obsidian-card p-4 border-l-4 border-l-emerald-500">
-                  <div className="text-[10px] font-bold uppercase text-emerald-400 tracking-wider">MÁY CÓ SẴN</div>
-                  <div className="text-2xl lg:text-3xl font-extrabold text-white mt-1">{availableCount}</div>
+              {/* TOP 4 SUMMARY METRIC STRIP */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="obsidian-card p-5 border-l-4 border-l-emerald-500">
+                  <div className="text-xs font-bold uppercase text-emerald-400 tracking-wider">MÁY CÓ SẴN</div>
+                  <div className="text-3xl font-extrabold text-white mt-1.5">{availableCount}</div>
                 </div>
 
-                <div className="obsidian-card p-4 border-l-4 border-l-amber-500">
-                  <div className="text-[10px] font-bold uppercase text-amber-400 tracking-wider">ĐANG SỬ DỤNG</div>
-                  <div className="text-2xl lg:text-3xl font-extrabold text-white mt-1">{inUseCount}</div>
+                <div className="obsidian-card p-5 border-l-4 border-l-amber-500">
+                  <div className="text-xs font-bold uppercase text-amber-400 tracking-wider">ĐANG SỬ DỤNG</div>
+                  <div className="text-3xl font-extrabold text-white mt-1.5">{inUseCount}</div>
                 </div>
 
-                <div className="obsidian-card p-4 border-l-4 border-l-rose-500">
-                  <div className="text-[10px] font-bold uppercase text-rose-400 tracking-wider">BẢO TRÌ</div>
-                  <div className="text-2xl lg:text-3xl font-extrabold text-white mt-1">{maintenanceCount}</div>
+                <div className="obsidian-card p-5 border-l-4 border-l-rose-500">
+                  <div className="text-xs font-bold uppercase text-rose-400 tracking-wider">BẢO TRÌ</div>
+                  <div className="text-3xl font-extrabold text-white mt-1.5">{maintenanceCount}</div>
                 </div>
 
-                <div className="obsidian-card p-4 border-l-4 border-l-cyan-500">
-                  <div className="text-[10px] font-bold uppercase text-cyan-400 tracking-wider">YÊU CẦU CHỜ</div>
-                  <div className="text-2xl lg:text-3xl font-extrabold text-white mt-1">{pendingRequestsCount}</div>
+                <div className="obsidian-card p-5 border-l-4 border-l-cyan-500">
+                  <div className="text-xs font-bold uppercase text-cyan-400 tracking-wider">YÊU CẦU CHỜ</div>
+                  <div className="text-3xl font-extrabold text-white mt-1.5">{pendingRequestsCount}</div>
                 </div>
               </div>
 
@@ -999,63 +1024,63 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
                 {/* Left: Danh sách máy trong phòng (7 cols) */}
-                <div className="lg:col-span-7 obsidian-card p-6 space-y-4 border border-white/10">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="lg:col-span-7 obsidian-card p-6 lg:p-7 space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
                     <div>
-                      <h2 className="text-base font-bold text-white">Danh sách máy trong phòng</h2>
+                      <h2 className="text-lg font-bold text-white">Danh sách máy trong phòng</h2>
                       <p className="text-xs text-slate-400">Tổng quan trạng thái từng thiết bị</p>
                     </div>
 
                     {/* Filter & Search */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                       <div className="relative">
-                        <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                           type="text"
                           placeholder="Tìm mã máy..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="glass-input pl-8 py-1.5 text-xs w-32 sm:w-44"
+                          className="glass-input pl-9 py-2 text-xs w-36 sm:w-48"
                         />
                       </div>
                       <select
                         value={selectedRoomFilter}
                         onChange={(e) => setSelectedRoomFilter(e.target.value)}
-                        className="glass-input py-1.5 text-xs w-24"
+                        className="glass-input py-2 text-xs w-28 font-medium"
                       >
-                        <option value="all">Tất cả</option>
-                        <option value="C201">C201</option>
-                        <option value="C202">C202</option>
+                        <option value="all">Tất cả phòng</option>
+                        <option value="C201">Phòng C201</option>
+                        <option value="C202">Phòng C202</option>
                       </select>
                     </div>
                   </div>
 
-                  {/* List of Machines matching screenshot 3 */}
-                  <div className="space-y-3 pt-2">
+                  {/* List of Machines */}
+                  <div className="space-y-3.5">
                     {filteredComputers.map((comp) => (
                       <div
                         key={comp.id}
-                        className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-indigo-500/40 hover:bg-white/[0.04] transition flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-indigo-500/50 hover:bg-white/[0.05] transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                       >
-                        <div className="flex items-center gap-3.5">
-                          <div className="w-11 h-11 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex flex-col items-center justify-center shrink-0">
-                            <span className="text-xs font-bold text-indigo-400">M</span>
-                            <span className="text-[9px] text-slate-400 font-mono leading-none">{comp.name}</span>
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-indigo-600/25 border border-indigo-500/40 flex flex-col items-center justify-center shrink-0 shadow-md">
+                            <span className="text-sm font-extrabold text-indigo-400">M</span>
+                            <span className="text-[10px] text-slate-400 font-mono leading-none">{comp.name}</span>
                           </div>
                           <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-bold text-white">{comp.name}</span>
-                              <span className="text-[10px] px-2 py-0.5 rounded bg-white/10 text-slate-300 font-mono">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-base font-bold text-white">{comp.name}</span>
+                              <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/10 text-slate-300 font-mono font-bold">
                                 {comp.room}
                               </span>
                             </div>
-                            <div className="text-xs text-slate-400 mt-0.5">
-                              {comp.cpu} • {comp.ram}
+                            <div className="text-xs text-slate-400 mt-1 flex items-center gap-2">
+                              <span>{comp.cpu}</span> • <span>{comp.ram}</span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 self-end sm:self-auto">
+                        <div className="flex items-center gap-2.5 self-end sm:self-auto">
                           {comp.status === "available" && (
                             <span className="badge-available">Có sẵn</span>
                           )}
@@ -1068,7 +1093,7 @@ export default function Home() {
 
                           <button
                             onClick={() => setSelectedComputerDetail(comp)}
-                            className="px-3 py-1.5 text-xs rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                            className="btn-secondary-glow text-xs"
                           >
                             Xem chi tiết
                           </button>
@@ -1080,13 +1105,13 @@ export default function Home() {
                                 showToast(`Đã cập nhật máy ${comp.name}`);
                               }
                             }}
-                            className="px-3 py-1.5 text-xs rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition"
+                            className="btn-secondary-glow text-xs"
                           >
                             Sửa
                           </button>
                           <button
                             onClick={() => handleDeleteComputer(comp.id)}
-                            className="px-3 py-1.5 text-xs rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 transition"
+                            className="px-3 py-2 text-xs rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 font-semibold transition"
                           >
                             Xoá
                           </button>
@@ -1096,20 +1121,20 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right: Đăng ký mượn máy (5 cols - Screenshot 3 right panel) */}
-                <div className="lg:col-span-5 obsidian-card p-6 space-y-4 border border-white/10">
-                  <div>
-                    <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
+                {/* Right: Đăng ký mượn máy (5 cols) */}
+                <div className="lg:col-span-5 obsidian-card p-6 lg:p-7 space-y-5">
+                  <div className="pb-3 border-b border-white/10">
+                    <span className="text-xs font-extrabold tracking-widest text-indigo-400 uppercase">
                       REQUEST
                     </span>
-                    <h2 className="text-base font-bold text-white mt-0.5">
+                    <h2 className="text-lg font-bold text-white mt-1">
                       Đăng ký mượn máy
                     </h2>
                   </div>
 
                   <form onSubmit={handleBorrowSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                         Chọn máy
                       </label>
                       <select
@@ -1118,7 +1143,7 @@ export default function Home() {
                         required
                         className="glass-input"
                       >
-                        <option value="">-- Chọn máy --</option>
+                        <option value="">-- Chọn máy khả dụng --</option>
                         {computers
                           .filter(c => c.status === "available")
                           .map(c => (
@@ -1130,7 +1155,7 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                         Lý do mượn
                       </label>
                       <textarea
@@ -1143,7 +1168,7 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                      <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                         Thời gian mượn
                       </label>
                       <select
@@ -1160,22 +1185,22 @@ export default function Home() {
 
                     <button
                       type="submit"
-                      className="w-full btn-primary-glow py-3 rounded-xl text-xs font-semibold uppercase tracking-wider"
+                      className="w-full btn-primary-glow py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider mt-2"
                     >
-                      Gửi yêu cầu mượn
+                      Gửi yêu cầu mượn máy
                     </button>
                   </form>
                 </div>
 
               </div>
 
-              {/* BOTTOM TABLE: APPROVAL - Yêu cầu mượn máy (Screenshot 3 bottom table) */}
-              <div className="obsidian-card p-6 space-y-4 border border-white/10">
-                <div>
-                  <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
+              {/* BOTTOM TABLE: APPROVAL - Yêu cầu mượn máy */}
+              <div className="obsidian-card p-6 lg:p-7 space-y-4">
+                <div className="pb-3 border-b border-white/10">
+                  <span className="text-xs font-extrabold tracking-widest text-indigo-400 uppercase">
                     APPROVAL
                   </span>
-                  <h2 className="text-base font-bold text-white mt-0.5">
+                  <h2 className="text-lg font-bold text-white mt-1">
                     Yêu cầu mượn máy
                   </h2>
                 </div>
@@ -1183,60 +1208,60 @@ export default function Home() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
-                      <tr className="border-b border-white/10 text-slate-400 font-semibold">
-                        <th className="py-3 px-4">Máy</th>
-                        <th className="py-3 px-4">Người yêu cầu</th>
-                        <th className="py-3 px-4">Lý do</th>
-                        <th className="py-3 px-4">Thời gian</th>
-                        <th className="py-3 px-4">Trạng thái</th>
-                        <th className="py-3 px-4 text-right">Thao tác</th>
+                      <tr className="border-b border-white/10 text-slate-400 font-bold uppercase text-[11px]">
+                        <th className="py-3.5 px-4">Máy</th>
+                        <th className="py-3.5 px-4">Người yêu cầu</th>
+                        <th className="py-3.5 px-4">Lý do</th>
+                        <th className="py-3.5 px-4">Thời gian</th>
+                        <th className="py-3.5 px-4">Trạng thái</th>
+                        <th className="py-3.5 px-4 text-right">Thao tác</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/[0.05]">
+                    <tbody className="divide-y divide-white/[0.06]">
                       {requests.map((req) => (
-                        <tr key={req.id} className="hover:bg-white/[0.02] transition">
-                          <td className="py-3.5 px-4 font-bold text-white font-mono">
+                        <tr key={req.id} className="hover:bg-white/[0.03] transition">
+                          <td className="py-4 px-4 font-bold text-white font-mono text-sm">
                             {req.computerName}
                           </td>
-                          <td className="py-3.5 px-4 text-slate-200">
-                            <div>{req.requester}</div>
-                            <div className="text-[10px] text-slate-400 font-mono">{req.requesterId}</div>
+                          <td className="py-4 px-4 text-slate-200">
+                            <div className="font-semibold text-white">{req.requester}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">{req.requesterId}</div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-300 max-w-xs truncate">
+                          <td className="py-4 px-4 text-slate-300 max-w-xs truncate font-medium">
                             {req.reason || "Không có lý do"}
                           </td>
-                          <td className="py-3.5 px-4 text-slate-400">
+                          <td className="py-4 px-4 text-slate-400 font-semibold">
                             {req.duration}
                           </td>
-                          <td className="py-3.5 px-4">
+                          <td className="py-4 px-4">
                             {req.status === "approved" && (
-                              <span className="badge-available text-[11px]">Đã duyệt</span>
+                              <span className="badge-available">Đã duyệt</span>
                             )}
                             {req.status === "pending" && (
-                              <span className="badge-pending text-[11px]">Chờ duyệt</span>
+                              <span className="badge-pending">Chờ duyệt</span>
                             )}
                             {req.status === "rejected" && (
-                              <span className="badge-maintenance text-[11px]">Từ chối</span>
+                              <span className="badge-maintenance">Từ chối</span>
                             )}
                           </td>
-                          <td className="py-3.5 px-4 text-right">
+                          <td className="py-4 px-4 text-right">
                             {req.status === "pending" ? (
                               <div className="flex items-center justify-end gap-2">
                                 <button
                                   onClick={() => handleUpdateRequestStatus(req.id, "approved")}
-                                  className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30 text-xs font-medium transition"
+                                  className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold transition"
                                 >
                                   Duyệt
                                 </button>
                                 <button
                                   onClick={() => handleUpdateRequestStatus(req.id, "rejected")}
-                                  className="px-3 py-1 rounded-lg bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/30 text-xs font-medium transition"
+                                  className="px-3.5 py-1.5 rounded-xl bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold transition"
                                 >
                                   Từ chối
                                 </button>
                               </div>
                             ) : (
-                              <span className="text-[11px] text-slate-500">Hoàn tất</span>
+                              <span className="text-xs text-slate-500 font-medium">Hoàn tất</span>
                             )}
                           </td>
                         </tr>
@@ -1256,29 +1281,29 @@ export default function Home() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-bold tracking-widest text-indigo-400 uppercase">
+                  <span className="text-xs font-extrabold tracking-widest text-indigo-400 uppercase">
                     ACCOUNT
                   </span>
-                  <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                     Hồ sơ cá nhân
                   </h1>
                 </div>
-                <span className="badge-available px-3.5 py-1 text-xs font-bold">
+                <span className="badge-available px-4 py-1.5 text-xs font-bold">
                   {user.status}
                 </span>
               </div>
 
-              {/* Main Profile Card matching Screenshot 4 */}
-              <div className="obsidian-card p-6 md:p-10 border border-white/10">
+              {/* Main Profile Card */}
+              <div className="obsidian-card p-6 md:p-10">
                 <form onSubmit={handleProfileSave} className="grid grid-cols-1 md:grid-cols-12 gap-8">
                   
-                  {/* Left Column: Avatar & Avatar Upload */}
-                  <div className="md:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-center">
-                    <div className="text-xs font-semibold text-slate-400 mb-4">
+                  {/* Left Column: Avatar */}
+                  <div className="md:col-span-4 flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.03] border border-white/10 text-center">
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5">
                       Ảnh đại diện
                     </div>
                     
-                    <div className="w-36 h-36 rounded-full overflow-hidden border-2 border-indigo-500/50 shadow-2xl shadow-indigo-500/25">
+                    <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-indigo-500/50 shadow-2xl shadow-indigo-500/30">
                       <img
                         src={user.avatar}
                         alt="Profile Avatar"
@@ -1286,8 +1311,8 @@ export default function Home() {
                       />
                     </div>
 
-                    <div className="mt-5 w-full">
-                      <label className="btn-secondary-glow text-xs w-full justify-center cursor-pointer">
+                    <div className="mt-6 w-full">
+                      <label className="btn-secondary-glow text-xs w-full justify-center cursor-pointer py-2.5">
                         <span>Đổi ảnh đại diện</span>
                         <input
                           type="file"
@@ -1307,8 +1332,8 @@ export default function Home() {
                       </label>
                     </div>
 
-                    <p className="text-[10px] text-slate-400 mt-2">
-                      Khuyến nghị ảnh kích thước 400x400px
+                    <p className="text-[11px] text-slate-400 mt-2.5">
+                      Khuyến nghị ảnh kích thước 400x400px (PNG, JPG)
                     </p>
                   </div>
 
@@ -1316,7 +1341,7 @@ export default function Home() {
                   <div className="md:col-span-8 space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           Họ và tên
                         </label>
                         <input
@@ -1328,7 +1353,7 @@ export default function Home() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           MSSV
                         </label>
                         <input
@@ -1340,7 +1365,7 @@ export default function Home() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           Lớp
                         </label>
                         <input
@@ -1352,7 +1377,7 @@ export default function Home() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           Giới tính
                         </label>
                         <select
@@ -1367,7 +1392,7 @@ export default function Home() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           Số điện thoại
                         </label>
                         <input
@@ -1379,7 +1404,7 @@ export default function Home() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                        <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                           Email
                         </label>
                         <input
@@ -1394,7 +1419,7 @@ export default function Home() {
                     <div className="pt-4 flex justify-end">
                       <button
                         type="submit"
-                        className="px-6 py-2.5 rounded-xl bg-slate-900 border border-white/20 text-white font-semibold text-xs hover:bg-slate-800 hover:border-indigo-500 transition shadow-lg"
+                        className="btn-primary-glow px-8 py-3 rounded-xl text-xs font-bold"
                       >
                         Lưu thay đổi hồ sơ
                       </button>
@@ -1412,124 +1437,124 @@ export default function Home() {
           {currentView === "swagger" && (
             <div className="space-y-6">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs font-mono px-3 py-1 rounded-md bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
                     OAS 3.0
                   </span>
-                  <span className="text-xs text-slate-400">QLPL RESTful Backend API</span>
+                  <span className="text-xs text-slate-400 font-semibold">QLPL RESTful Backend API</span>
                 </div>
-                <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight mt-1">
+                <h1 className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight mt-1.5">
                   Swagger API Explorer
                 </h1>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Tài liệu và công cụ kiểm thử trực tiếp các API Backend (Node.js Express / Port 5000)
+                <p className="text-sm text-slate-400 mt-1">
+                  Tài liệu và công cụ kiểm thử trực tiếp các API Backend Next.js Serverless & Supabase
                 </p>
               </div>
 
               <div className="space-y-4">
                 {/* GET /api/computers */}
-                <div className="obsidian-card overflow-hidden border border-cyan-500/30">
-                  <div className="p-4 flex items-center justify-between bg-cyan-950/20">
-                    <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-cyan-500 text-black font-bold text-xs">
+                <div className="obsidian-card overflow-hidden border border-cyan-500/40">
+                  <div className="p-4 flex items-center justify-between bg-cyan-950/25">
+                    <div className="flex items-center gap-3.5">
+                      <span className="px-3 py-1 rounded-lg bg-cyan-500 text-black font-extrabold text-xs">
                         GET
                       </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                      <span className="font-mono text-sm font-bold text-white">
                         /api/computers
                       </span>
-                      <span className="text-xs text-slate-400 hidden sm:inline">
+                      <span className="text-xs text-slate-400 hidden sm:inline font-medium">
                         Lấy danh sách tất cả các máy tính phòng lab
                       </span>
                     </div>
                     <button
                       onClick={async () => {
                         try {
-                          const res = await fetch("http://localhost:5000/api/computers");
+                          const res = await fetch("/api/computers");
                           const data = await res.json();
                           alert("Response 200 OK:\n" + JSON.stringify(data, null, 2));
                         } catch (e) {
                           alert("Mock Response 200 OK:\n" + JSON.stringify({ success: true, count: computers.length, data: computers }, null, 2));
                         }
                       }}
-                      className="btn-secondary-glow text-xs py-1"
+                      className="btn-secondary-glow text-xs py-1.5"
                     >
-                      <Play className="w-3 h-3 text-cyan-400" /> Try it out
+                      <Play className="w-3.5 h-3.5 text-cyan-400" /> Try it out
                     </button>
                   </div>
                 </div>
 
                 {/* POST /api/computers */}
-                <div className="obsidian-card overflow-hidden border border-emerald-500/30">
-                  <div className="p-4 flex items-center justify-between bg-emerald-950/20">
-                    <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-emerald-500 text-black font-bold text-xs">
+                <div className="obsidian-card overflow-hidden border border-emerald-500/40">
+                  <div className="p-4 flex items-center justify-between bg-emerald-950/25">
+                    <div className="flex items-center gap-3.5">
+                      <span className="px-3 py-1 rounded-lg bg-emerald-500 text-black font-extrabold text-xs">
                         POST
                       </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                      <span className="font-mono text-sm font-bold text-white">
                         /api/computers
                       </span>
-                      <span className="text-xs text-slate-400 hidden sm:inline">
+                      <span className="text-xs text-slate-400 hidden sm:inline font-medium">
                         Thêm máy tính mới vào phòng
                       </span>
                     </div>
                     <button
                       onClick={() => setIsAddModalOpen(true)}
-                      className="btn-secondary-glow text-xs py-1"
+                      className="btn-secondary-glow text-xs py-1.5"
                     >
-                      <Play className="w-3 h-3 text-emerald-400" /> Try it out
+                      <Play className="w-3.5 h-3.5 text-emerald-400" /> Try it out
                     </button>
                   </div>
                 </div>
 
                 {/* GET /api/requests */}
-                <div className="obsidian-card overflow-hidden border border-cyan-500/30">
-                  <div className="p-4 flex items-center justify-between bg-cyan-950/20">
-                    <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-cyan-500 text-black font-bold text-xs">
+                <div className="obsidian-card overflow-hidden border border-cyan-500/40">
+                  <div className="p-4 flex items-center justify-between bg-cyan-950/25">
+                    <div className="flex items-center gap-3.5">
+                      <span className="px-3 py-1 rounded-lg bg-cyan-500 text-black font-extrabold text-xs">
                         GET
                       </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                      <span className="font-mono text-sm font-bold text-white">
                         /api/requests
                       </span>
-                      <span className="text-xs text-slate-400 hidden sm:inline">
+                      <span className="text-xs text-slate-400 hidden sm:inline font-medium">
                         Danh sách các yêu cầu mượn máy
                       </span>
                     </div>
                     <button
                       onClick={async () => {
                         try {
-                          const res = await fetch("http://localhost:5000/api/requests");
+                          const res = await fetch("/api/requests");
                           const data = await res.json();
                           alert("Response 200 OK:\n" + JSON.stringify(data, null, 2));
                         } catch (e) {
                           alert("Mock Response 200 OK:\n" + JSON.stringify({ success: true, count: requests.length, data: requests }, null, 2));
                         }
                       }}
-                      className="btn-secondary-glow text-xs py-1"
+                      className="btn-secondary-glow text-xs py-1.5"
                     >
-                      <Play className="w-3 h-3 text-cyan-400" /> Try it out
+                      <Play className="w-3.5 h-3.5 text-cyan-400" /> Try it out
                     </button>
                   </div>
                 </div>
 
                 {/* GET /api/stats */}
-                <div className="obsidian-card overflow-hidden border border-indigo-500/30">
-                  <div className="p-4 flex items-center justify-between bg-indigo-950/20">
-                    <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-indigo-500 text-white font-bold text-xs">
+                <div className="obsidian-card overflow-hidden border border-indigo-500/40">
+                  <div className="p-4 flex items-center justify-between bg-indigo-950/25">
+                    <div className="flex items-center gap-3.5">
+                      <span className="px-3 py-1 rounded-lg bg-indigo-500 text-white font-extrabold text-xs">
                         GET
                       </span>
-                      <span className="font-mono text-xs font-bold text-white">
+                      <span className="font-mono text-sm font-bold text-white">
                         /api/stats
                       </span>
-                      <span className="text-xs text-slate-400 hidden sm:inline">
+                      <span className="text-xs text-slate-400 hidden sm:inline font-medium">
                         Thống kê tổng quan và số liệu live
                       </span>
                     </div>
                     <button
                       onClick={async () => {
                         try {
-                          const res = await fetch("http://localhost:5000/api/stats");
+                          const res = await fetch("/api/stats");
                           const data = await res.json();
                           alert("Response 200 OK:\n" + JSON.stringify(data, null, 2));
                         } catch (e) {
@@ -1544,9 +1569,9 @@ export default function Home() {
                           }, null, 2));
                         }
                       }}
-                      className="btn-secondary-glow text-xs py-1"
+                      className="btn-secondary-glow text-xs py-1.5"
                     >
-                      <Play className="w-3 h-3 text-indigo-400" /> Try it out
+                      <Play className="w-3.5 h-3.5 text-indigo-400" /> Try it out
                     </button>
                   </div>
                 </div>
@@ -1559,25 +1584,25 @@ export default function Home() {
 
       {/* MODAL: THÊM MÁY TÍNH MỚI */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
-          <div className="obsidian-card max-w-lg w-full p-6 border border-white/20 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Plus className="w-4 h-4 text-indigo-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="obsidian-card max-w-lg w-full p-7 border border-white/20 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
+                <Plus className="w-5 h-5 text-indigo-400" />
                 Thêm máy tính mới vào phòng
               </h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-white transition"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleAddComputerSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Tên / Mã máy (*)
                   </label>
                   <input
@@ -1590,7 +1615,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Phòng lab (*)
                   </label>
                   <input
@@ -1605,7 +1630,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Vi xử lý (CPU)
                 </label>
                 <input
@@ -1617,9 +1642,9 @@ export default function Home() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Bộ nhớ RAM
                   </label>
                   <input
@@ -1631,7 +1656,7 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Card đồ họa (GPU)
                   </label>
                   <input
@@ -1645,7 +1670,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Trạng thái ban đầu
                 </label>
                 <select
@@ -1660,7 +1685,7 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                   Ghi chú
                 </label>
                 <input
@@ -1672,7 +1697,7 @@ export default function Home() {
                 />
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-3 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
@@ -1694,15 +1719,15 @@ export default function Home() {
 
       {/* MODAL: CHI TIẾT MÁY TÍNH */}
       {selectedComputerDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
-          <div className="obsidian-card max-w-md w-full p-6 border border-white/20 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="obsidian-card max-w-md w-full p-7 border border-white/20 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-600/25 border border-indigo-500/40 flex items-center justify-center font-extrabold text-indigo-400 text-base shadow-md">
                   {selectedComputerDetail.name}
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">
+                  <h3 className="text-lg font-bold text-white">
                     Thông tin máy {selectedComputerDetail.name}
                   </h3>
                   <p className="text-xs text-slate-400">Phòng {selectedComputerDetail.room}</p>
@@ -1710,40 +1735,40 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setSelectedComputerDetail(null)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-white transition"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-slate-400">Trạng thái:</span>
+            <div className="space-y-3 text-xs">
+              <div className="flex justify-between py-2 border-b border-white/5">
+                <span className="text-slate-400 font-medium">Trạng thái:</span>
                 <span>
                   {selectedComputerDetail.status === "available" && <span className="badge-available">Có sẵn</span>}
                   {selectedComputerDetail.status === "in_use" && <span className="badge-in-use">Đang dùng</span>}
                   {selectedComputerDetail.status === "maintenance" && <span className="badge-maintenance">Bảo trì</span>}
                 </span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-slate-400">Người đang dùng:</span>
-                <span className="text-white font-medium">{selectedComputerDetail.currentUser || "Không có"}</span>
+              <div className="flex justify-between py-2 border-b border-white/5">
+                <span className="text-slate-400 font-medium">Người đang dùng:</span>
+                <span className="text-white font-bold">{selectedComputerDetail.currentUser || "Không có"}</span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-slate-400">Vi xử lý (CPU):</span>
-                <span className="text-white font-medium">{selectedComputerDetail.cpu}</span>
+              <div className="flex justify-between py-2 border-b border-white/5">
+                <span className="text-slate-400 font-medium">Vi xử lý (CPU):</span>
+                <span className="text-white font-bold">{selectedComputerDetail.cpu}</span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-slate-400">Bộ nhớ (RAM):</span>
-                <span className="text-white font-medium">{selectedComputerDetail.ram}</span>
+              <div className="flex justify-between py-2 border-b border-white/5">
+                <span className="text-slate-400 font-medium">Bộ nhớ (RAM):</span>
+                <span className="text-white font-bold">{selectedComputerDetail.ram}</span>
               </div>
-              <div className="flex justify-between py-1.5 border-b border-white/5">
-                <span className="text-slate-400">Card màn hình:</span>
-                <span className="text-white font-medium">{selectedComputerDetail.gpu}</span>
+              <div className="flex justify-between py-2 border-b border-white/5">
+                <span className="text-slate-400 font-medium">Card màn hình:</span>
+                <span className="text-white font-bold">{selectedComputerDetail.gpu}</span>
               </div>
-              <div className="py-1.5">
-                <span className="text-slate-400 block mb-1">Ghi chú:</span>
-                <p className="text-slate-200 bg-white/[0.03] p-2.5 rounded-xl border border-white/[0.06]">
+              <div className="py-2">
+                <span className="text-slate-400 block mb-1.5 font-medium">Ghi chú thiết bị:</span>
+                <p className="text-slate-200 bg-white/[0.03] p-3 rounded-xl border border-white/[0.08] leading-relaxed">
                   {selectedComputerDetail.notes || "Không có ghi chú"}
                 </p>
               </div>
@@ -1752,7 +1777,7 @@ export default function Home() {
             <div className="pt-2 flex justify-end">
               <button
                 onClick={() => setSelectedComputerDetail(null)}
-                className="btn-primary-glow text-xs w-full justify-center"
+                className="btn-primary-glow text-xs w-full justify-center py-3"
               >
                 Đóng
               </button>
