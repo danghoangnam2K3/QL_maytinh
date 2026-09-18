@@ -1,0 +1,14 @@
+{
+  "name": "ql-maytinh-workspace",
+  "version": "1.0.0",
+  "description": "Hệ thống Quản lý phòng máy tính QLPL - Next.js & Node.js Black Edition",
+  "scripts": {
+    "dev:backend": "node backend/server.js",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "backend": "node backend/server.js",
+    "frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": ["qlpl", "nextjs", "nodejs", "dark-mode"],
+  "author": "QLPL Team",
+  "license": "MIT"
+}
