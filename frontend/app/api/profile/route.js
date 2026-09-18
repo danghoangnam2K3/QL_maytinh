@@ -60,11 +60,19 @@ export async function PUT(req) {
     if (body.email !== undefined) updatePayload.email = body.email;
     if (body.avatar !== undefined) updatePayload.avatar_url = body.avatar;
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .update(updatePayload)
-      .eq('student_id', body.studentId || 'NV0001171')
-      .select();
+    let query = supabase.from('profiles').update(updatePayload);
+    if (body.id) {
+      query = query.eq('id', body.id);
+    } else {
+      const { data: firstProfile } = await supabase.from('profiles').select('id').limit(1).single();
+      if (firstProfile?.id) {
+        query = query.eq('id', firstProfile.id);
+      } else {
+        query = query.eq('student_id', 'NV0001171');
+      }
+    }
+
+    const { data, error } = await query.select();
 
     if (error) {
       return NextResponse.json({ success: false, message: error.message }, { status: 400 });

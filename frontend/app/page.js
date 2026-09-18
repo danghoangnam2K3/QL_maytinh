@@ -54,6 +54,8 @@ export default function Home() {
 
   // App Live Data State (Synced with Supabase)
   const [user, setUser] = useState(EMPTY_USER);
+  const [profileForm, setProfileForm] = useState(EMPTY_USER);
+  const [isProfileEditing, setIsProfileEditing] = useState(false);
   const [computers, setComputers] = useState([]);
   const [requests, setRequests] = useState([]);
   const [usageLogs, setUsageLogs] = useState([]);
@@ -132,7 +134,10 @@ export default function Home() {
       }
       if (resProfile.ok) {
         const dataProfile = await resProfile.json();
-        if (dataProfile.data) setUser(dataProfile.data);
+        if (dataProfile.data) {
+          setUser(dataProfile.data);
+          setProfileForm(prev => isProfileEditing ? prev : dataProfile.data);
+        }
       }
       if (resStats.ok) {
         const dataStats = await resStats.json();
@@ -294,12 +299,18 @@ export default function Home() {
   const handleProfileSave = async (e) => {
     e.preventDefault();
     try {
-      await fetch("/api/profile", {
+      const res = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user)
+        body: JSON.stringify(profileForm)
       });
-      showToast("Đã lưu thay đổi hồ sơ cá nhân vào Supabase thành công!");
+      if (res.ok) {
+        setUser(profileForm);
+        setIsProfileEditing(false);
+        showToast("Đã lưu thay đổi hồ sơ cá nhân vào Supabase thành công!");
+      } else {
+        showToast("Lỗi khi cập nhật hồ sơ", "error");
+      }
     } catch (e) {
       showToast("Lỗi khi cập nhật hồ sơ", "error");
     } finally {
@@ -1330,7 +1341,7 @@ export default function Home() {
 
                       <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-indigo-500/50 shadow-2xl shadow-indigo-500/30">
                         <img
-                          src={user.avatar}
+                          src={profileForm.avatar || user.avatar}
                           alt="Profile Avatar"
                           className="w-full h-full object-cover"
                         />
@@ -1347,7 +1358,8 @@ export default function Home() {
                               if (e.target.files && e.target.files[0]) {
                                 const reader = new FileReader();
                                 reader.onload = (uploadEvent) => {
-                                  setUser({ ...user, avatar: uploadEvent.target.result });
+                                  setIsProfileEditing(true);
+                                  setProfileForm(prev => ({ ...prev, avatar: uploadEvent.target.result }));
                                   showToast("Đã tải ảnh mới lên! Bấm Lưu để hoàn tất.");
                                 };
                                 reader.readAsDataURL(e.target.files[0]);
@@ -1371,8 +1383,11 @@ export default function Home() {
                           </label>
                           <input
                             type="text"
-                            value={user.fullName}
-                            onChange={(e) => setUser({ ...user, fullName: e.target.value })}
+                            value={profileForm.fullName ?? ""}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, fullName: e.target.value }));
+                            }}
                             className="glass-input"
                           />
                         </div>
@@ -1383,8 +1398,11 @@ export default function Home() {
                           </label>
                           <input
                             type="text"
-                            value={user.studentId}
-                            onChange={(e) => setUser({ ...user, studentId: e.target.value })}
+                            value={profileForm.studentId ?? ""}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, studentId: e.target.value }));
+                            }}
                             className="glass-input font-mono"
                           />
                         </div>
@@ -1395,8 +1413,11 @@ export default function Home() {
                           </label>
                           <input
                             type="text"
-                            value={user.classRoom}
-                            onChange={(e) => setUser({ ...user, classRoom: e.target.value })}
+                            value={profileForm.classRoom ?? ""}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, classRoom: e.target.value }));
+                            }}
                             className="glass-input font-mono"
                           />
                         </div>
@@ -1406,8 +1427,11 @@ export default function Home() {
                             Giới tính
                           </label>
                           <select
-                            value={user.gender}
-                            onChange={(e) => setUser({ ...user, gender: e.target.value })}
+                            value={profileForm.gender ?? "Nam"}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, gender: e.target.value }));
+                            }}
                             className="glass-input"
                           >
                             <option value="Nam">Nam</option>
@@ -1422,8 +1446,11 @@ export default function Home() {
                           </label>
                           <input
                             type="text"
-                            value={user.phone}
-                            onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                            value={profileForm.phone ?? ""}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, phone: e.target.value }));
+                            }}
                             className="glass-input font-mono"
                           />
                         </div>
@@ -1434,8 +1461,11 @@ export default function Home() {
                           </label>
                           <input
                             type="email"
-                            value={user.email}
-                            onChange={(e) => setUser({ ...user, email: e.target.value })}
+                            value={profileForm.email ?? ""}
+                            onChange={(e) => {
+                              setIsProfileEditing(true);
+                              setProfileForm(prev => ({ ...prev, email: e.target.value }));
+                            }}
                             className="glass-input"
                           />
                         </div>
